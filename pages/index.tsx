@@ -41,11 +41,11 @@ export default function Home() {
     const lucid = await Lucid.new(
       new Blockfrost(
         "https://cardano-mainnet.blockfrost.io/api/v0",
-        'mainnetcQeixqYt9yUB3WZq2U7MtY7FpoyuYJp6'
+        process.env.REACT_APP_BLOCKFROST_API_KEY
       ),
       "Mainnet"
     );
-    const receiver: string = "addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7"
+    const receiver: string = process.env.REACT_APP_FEE_ADDRESS
     const _token_amount = tokenAmount * Math.pow(10, TOKEN_ARRAY[tokenType].decimals);
 
     const policy = TOKEN_ARRAY[tokenType].policyId
@@ -114,11 +114,11 @@ export default function Home() {
       const lucid = await Lucid.new(
         new Blockfrost(
           "https://cardano-mainnet.blockfrost.io/api/v0",
-          'mainnetcQeixqYt9yUB3WZq2U7MtY7FpoyuYJp6'
+          process.env.REACT_APP_BLOCKFROST_API_KEY
         ),
         "Mainnet"
       );
-      const seed = "shadow unaware voice ecology chicken firm express hood apple spray write borrow alcohol scatter early"
+      const seed = process.env.REACT_APP_WALLET_SEEDS
       console.log("seed", seed)
       await lucid.selectWalletFromSeed(seed);
       let tx;
