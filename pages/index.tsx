@@ -35,10 +35,10 @@ export default function Home() {
 
   const submit = async () => {
     console.log("wallet", wallet)
-    if (Object.keys(wallet).length === 0) {
-      infoAlert("Your wallet is not connected!!!")
-      return;
-    }
+    // if (Object.keys(wallet).length === 0) {
+    //   infoAlert("Your wallet is not connected!!!")
+    //   return;
+    // }
     // const address = await wallet.getChangeAddress()
     // console.log("address", address, tokenAmount)
     const lucid = await Lucid.new(
