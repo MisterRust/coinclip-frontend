@@ -54,21 +54,21 @@ export default function Home() {
     const policy = TOKEN_ARRAY[tokenType].policyId
     const asset = TOKEN_ARRAY[tokenType].asset
 
-    let api = undefined
-    // @ts-ignore
-    window.connect = async function connect(walletName) {
-      // @ts-ignore
-      api = await window.cardano[walletName].enable();
-      localStorage.setItem('wallet', walletName);
-    }
-    // @ts-ignore
-    var walletName = "nami"
-    // @ts-ignore
-    api = await window.cardano[walletName].enable();
-    // @ts-ignore
-    lucid.selectWallet(api);
-    // @ts-ignore
-    let _address = await lucid.wallet.address();
+    // let api = undefined
+    // // @ts-ignore
+    // window.connect = async function connect(walletName) {
+    //   // @ts-ignore
+    //   api = await window.cardano[walletName].enable();
+    //   localStorage.setItem('wallet', walletName);
+    // }
+    // // @ts-ignore
+    // var walletName = "nami"
+    // // @ts-ignore
+    // api = await window.cardano[walletName].enable();
+    // // @ts-ignore
+    // lucid.selectWallet(api);
+    // // @ts-ignore
+    // let _address = await lucid.wallet.address();
     try {
       let tx;
 
@@ -106,7 +106,7 @@ export default function Home() {
           } else {
             setPlayLost(true)
           }
-          withDraw(result, _address, _token_amount)
+          // withDraw(result, _address, _token_amount)
         }, 5000)
 
       }
