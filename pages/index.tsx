@@ -15,6 +15,7 @@ import { TOKEN_ARRAY } from '../consts/tokens.consts'
 import { LostSpinScreen, WinSpinScreen } from '../components/sections/SpinScreen'
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
+import ReactHowler from 'react-howler'
 export default function Home() {
   const { wallet, connected } = useWallet();
   console.log("wallet", wallet)
@@ -24,7 +25,8 @@ export default function Home() {
   const [tokenAmount, setTokenAmount] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
   const [isWin, setIsWin] = useState<boolean>();
-
+  const [playWin, setPlayWin] = useState<boolean>(false)
+  const [playLost, setPlayLost] = useState<boolean>(false)
   const playAgain = () => {
     setTokenAmount(5);
     setBetChoice("")
@@ -98,7 +100,12 @@ export default function Home() {
         console.log("Result", result)
         setTimeout(() => {
           setLoading(false)
-          withDraw(result, _address, _token_amount)
+          if (result) {
+            setPlayWin(true)
+          } else {
+            setPlayLost(true)
+          }
+          // withDraw(result, _address, _token_amount)
         }, 5000)
 
       }
@@ -154,7 +161,7 @@ export default function Home() {
   const handleTokenType = (event) => {
     setTokenType(event.target.value);
   };
-  
+
 
 
 
@@ -173,6 +180,22 @@ export default function Home() {
             <WinSpinScreen />
             :
             <LostSpinScreen />)
+        }
+        {
+          playWin &&
+          <ReactHowler
+            src='/sounds/win.wav'
+            playing={playWin}
+            loop={false}
+          />
+        }
+        {
+          playLost &&
+          <ReactHowler
+            src='sounds/lost.mp3'
+            playing={playLost}
+            loop={false}
+          />
         }
         <div>
           <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
