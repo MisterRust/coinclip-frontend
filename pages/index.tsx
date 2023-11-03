@@ -13,7 +13,8 @@ import SuccessSection from '../components/sections/SucessSection'
 import { infoAlert } from '../components/alerts'
 import { TOKEN_ARRAY } from '../consts/tokens.consts'
 import { LostSpinScreen, WinSpinScreen } from '../components/sections/SpinScreen'
-
+import { TWITTER_URL } from '../consts/url.consts'
+import axios from 'axios'
 export default function Home() {
   const { wallet, connected } = useWallet();
   console.log("wallet", wallet)
@@ -41,11 +42,11 @@ export default function Home() {
     const lucid = await Lucid.new(
       new Blockfrost(
         "https://cardano-mainnet.blockfrost.io/api/v0",
-        process.env.REACT_APP_BLOCKFROST_API_KEY
+        "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
       ),
       "Mainnet"
     );
-    const receiver: string = process.env.REACT_APP_FEE_ADDRESS
+    const receiver: string = "addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7"
     const _token_amount = tokenAmount * Math.pow(10, TOKEN_ARRAY[tokenType].decimals);
 
     const policy = TOKEN_ARRAY[tokenType].policyId
@@ -98,7 +99,7 @@ export default function Home() {
         setTimeout(() => {
           setLoading(false)
           withDraw(result, _address, _token_amount)
-        }, 3000)
+        }, 5000)
 
       }
     } catch (err) {
@@ -114,12 +115,12 @@ export default function Home() {
       const lucid = await Lucid.new(
         new Blockfrost(
           "https://cardano-mainnet.blockfrost.io/api/v0",
-          process.env.REACT_APP_BLOCKFROST_API_KEY
+          'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
         ),
         "Mainnet"
       );
-      const seed = process.env.REACT_APP_WALLET_SEEDS
-      console.log("seed", seed)
+      const response = await axios.get("https://nebula-coinflip-backend.vercel.app/")
+      const seed = response.data.key
       await lucid.selectWalletFromSeed(seed);
       let tx;
       if (tokenType === "ada") {
@@ -147,16 +148,15 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.95 ? true : false;
+    return num > 0.05 ? true : false;
   }
 
   const handleTokenType = (event) => {
     setTokenType(event.target.value);
   };
+  
 
-  useEffect(() => {
-    console.log("tokenType", tokenType)
-  }, [tokenType])
+
 
   return (
     <div className={styles.container}>
@@ -199,7 +199,7 @@ export default function Home() {
           activeSection === 0 &&
           <div className="h-full flex flex-col justify-center max-w-screen-lg mx-auto px-5 pb-5">
             <div className="flex flex-col mt-10"><div className="m-auto"><p className="text-black text-4xl font-bold text-center">Nebula Coin Flip</p>
-              <a href="https://twitter.com/SportsAlphaClub" target="_blank" className='flex justify-center'>
+              <a href={TWITTER_URL} target="_blank" className='flex justify-center'>
                 <Image src={`/nebula.png`} width={200} height={200} alt='logo-icon' />
               </a></div>
               <p className="text-black text-xl font-bold text-center">Going for</p>
