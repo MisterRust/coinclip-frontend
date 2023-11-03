@@ -72,26 +72,27 @@ export default function Home() {
     try {
       let tx;
 
-      if (tokenType === "ada") {
-        tx = await lucid.newTx()
-          // @ts-ignore
-          .payToAddress(receiver, { "lovelace": 1000000n })
-          // @ts-ignore
-          .payToAddress(receiver, { "lovelace": _token_amount })
-          .complete();
+      // if (tokenType === "ada") {
+      //   tx = await lucid.newTx()
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { "lovelace": 1000000n })
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { "lovelace": _token_amount })
+      //     .complete();
 
-      } else {
+      // } else {
 
-        tx = await lucid.newTx()
-          // @ts-ignore
-          .payToAddress(receiver, { "lovelace": 1000000n })
-          // @ts-ignore
-          .payToAddress(receiver, { [policy + asset]: _token_amount })
-          .complete();
-      }
-      const signedTx = await tx.sign().complete();
+      //   tx = await lucid.newTx()
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { "lovelace": 1000000n })
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { [policy + asset]: _token_amount })
+      //     .complete();
+      // }
+      // const signedTx = await tx.sign().complete();
 
-      const txHash = await signedTx.submit();
+      // const txHash = await signedTx.submit();
+      const txHash = true;
       if (txHash) {
         const result = isSuccess()
         setIsWin(result)
@@ -105,7 +106,7 @@ export default function Home() {
           } else {
             setPlayLost(true)
           }
-          // withDraw(result, _address, _token_amount)
+          withDraw(result, _address, _token_amount)
         }, 5000)
 
       }
@@ -119,32 +120,32 @@ export default function Home() {
     if (result) {
       // if success
       setActiveSection(1)
-      const lucid = await Lucid.new(
-        new Blockfrost(
-          "https://cardano-mainnet.blockfrost.io/api/v0",
-          'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
-        ),
-        "Mainnet"
-      );
-      const response = await axios.get("https://nebula-coinflip-backend.vercel.app/")
-      const seed = response.data.key
-      await lucid.selectWalletFromSeed(seed);
-      let tx;
-      if (tokenType === "ada") {
-        tx = await lucid.newTx()
-          .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
-          .complete();
+      // const lucid = await Lucid.new(
+      //   new Blockfrost(
+      //     "https://cardano-mainnet.blockfrost.io/api/v0",
+      //     'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
+      //   ),
+      //   "Mainnet"
+      // );
+      // const response = await axios.get("https://nebula-coinflip-backend.vercel.app/")
+      // const seed = response.data.key
+      // await lucid.selectWalletFromSeed(seed);
+      // let tx;
+      // if (tokenType === "ada") {
+      //   tx = await lucid.newTx()
+      //     .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
+      //     .complete();
 
-      } else {
-        tx = await lucid.newTx()
-          // @ts-ignore
-          .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
-          .complete();
-      }
-      const signedTx = await tx.sign().complete();
+      // } else {
+      //   tx = await lucid.newTx()
+      //     // @ts-ignore
+      //     .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
+      //     .complete();
+      // }
+      // const signedTx = await tx.sign().complete();
 
-      const txHash = await signedTx.submit();
-      console.log("txhash", txHash)
+      // const txHash = await signedTx.submit();
+      // console.log("txhash", txHash)
 
     } else {
       // if fail
