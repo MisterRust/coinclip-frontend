@@ -156,14 +156,14 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 0.05 ? true : false;
+    return num > 1 ? true : false;
   }
 
   const handleTokenType = (event) => {
     setTokenType(event.target.value);
   };
 
-
+////////////////////////////
 
 
   return (
