@@ -28,17 +28,15 @@ export default function Home() {
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost, setPlayLost] = useState<boolean>(false)
   const playAgain = () => {
-    setTokenAmount(5);
-    setBetChoice("")
-    setActiveSection(0);
+    location.href = "/"
   }
 
   const submit = async () => {
     console.log("wallet", wallet)
-    // if (Object.keys(wallet).length === 0) {
-    //   infoAlert("Your wallet is not connected!!!")
-    //   return;
-    // }
+    if (Object.keys(wallet).length === 0) {
+      infoAlert("Your wallet is not connected!!!")
+      return;
+    }
     // const address = await wallet.getChangeAddress()
     // console.log("address", address, tokenAmount)
     const lucid = await Lucid.new(
@@ -54,45 +52,45 @@ export default function Home() {
     const policy = TOKEN_ARRAY[tokenType].policyId
     const asset = TOKEN_ARRAY[tokenType].asset
 
-    // let api = undefined
-    // // @ts-ignore
-    // window.connect = async function connect(walletName) {
-    //   // @ts-ignore
-    //   api = await window.cardano[walletName].enable();
-    //   localStorage.setItem('wallet', walletName);
-    // }
-    // // @ts-ignore
-    // var walletName = "nami"
-    // // @ts-ignore
-    // api = await window.cardano[walletName].enable();
-    // // @ts-ignore
-    // lucid.selectWallet(api);
-    // // @ts-ignore
-    // let _address = await lucid.wallet.address();
+    let api = undefined
+    // @ts-ignore
+    window.connect = async function connect(walletName) {
+      // @ts-ignore
+      api = await window.cardano[walletName].enable();
+      localStorage.setItem('wallet', walletName);
+    }
+    // @ts-ignore
+    var walletName = "nami"
+    // @ts-ignore
+    api = await window.cardano[walletName].enable();
+    // @ts-ignore
+    lucid.selectWallet(api);
+    // @ts-ignore
+    let _address = await lucid.wallet.address();
     try {
       let tx;
 
-      // if (tokenType === "ada") {
-      //   tx = await lucid.newTx()
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { "lovelace": 1000000n })
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { "lovelace": _token_amount })
-      //     .complete();
+      if (tokenType === "ada") {
+        tx = await lucid.newTx()
+          // @ts-ignore
+          .payToAddress(receiver, { "lovelace": 1000000n })
+          // @ts-ignore
+          .payToAddress(receiver, { "lovelace": _token_amount })
+          .complete();
 
-      // } else {
+      } else {
 
-      //   tx = await lucid.newTx()
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { "lovelace": 1000000n })
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { [policy + asset]: _token_amount })
-      //     .complete();
-      // }
-      // const signedTx = await tx.sign().complete();
+        tx = await lucid.newTx()
+          // @ts-ignore
+          .payToAddress(receiver, { "lovelace": 1000000n })
+          // @ts-ignore
+          .payToAddress(receiver, { [policy + asset]: _token_amount })
+          .complete();
+      }
+      const signedTx = await tx.sign().complete();
 
-      // const txHash = await signedTx.submit();
-      const txHash = true;
+      const txHash = await signedTx.submit();
+      // const txHash = true;
       if (txHash) {
         const result = isSuccess()
         setIsWin(result)
@@ -102,11 +100,13 @@ export default function Home() {
         setTimeout(() => {
           setLoading(false)
           if (result) {
-            setPlayWin(true)
+            setActiveSection(1)
+            // setPlayWin(true)
           } else {
-            setPlayLost(true)
+            setActiveSection(2)
+            // setPlayLost(true)
           }
-          // withDraw(result, _address, _token_amount)
+          withDraw(result, _address, _token_amount)
         }, 5000)
 
       }
@@ -120,32 +120,32 @@ export default function Home() {
     if (result) {
       // if success
       setActiveSection(1)
-      // const lucid = await Lucid.new(
-      //   new Blockfrost(
-      //     "https://cardano-mainnet.blockfrost.io/api/v0",
-      //     'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
-      //   ),
-      //   "Mainnet"
-      // );
-      // const response = await axios.get("https://nebula-coinflip-backend.vercel.app/")
-      // const seed = response.data.key
-      // await lucid.selectWalletFromSeed(seed);
-      // let tx;
-      // if (tokenType === "ada") {
-      //   tx = await lucid.newTx()
-      //     .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
-      //     .complete();
+      const lucid = await Lucid.new(
+        new Blockfrost(
+          "https://cardano-mainnet.blockfrost.io/api/v0",
+          'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
+        ),
+        "Mainnet"
+      );
+      const response = await axios.get("https://nebula-coinflip-backend.vercel.app/")
+      const seed = response.data.key
+      await lucid.selectWalletFromSeed(seed);
+      let tx;
+      if (tokenType === "ada") {
+        tx = await lucid.newTx()
+          .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
+          .complete();
 
-      // } else {
-      //   tx = await lucid.newTx()
-      //     // @ts-ignore
-      //     .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
-      //     .complete();
-      // }
-      // const signedTx = await tx.sign().complete();
+      } else {
+        tx = await lucid.newTx()
+          // @ts-ignore
+          .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
+          .complete();
+      }
+      const signedTx = await tx.sign().complete();
 
-      // const txHash = await signedTx.submit();
-      // console.log("txhash", txHash)
+      const txHash = await signedTx.submit();
+      console.log("txhash", txHash)
 
     } else {
       // if fail
@@ -163,7 +163,7 @@ export default function Home() {
     setTokenType(event.target.value);
   };
 
-////////////////////////////
+  ////////////////////////////
 
 
   return (
@@ -258,15 +258,30 @@ export default function Home() {
         }
         {
           activeSection === 1 &&
-          <SuccessSection
-            onClick={playAgain}
-          />
+          <>
+            <SuccessSection
+              onClick={playAgain}
+            />
+            <ReactHowler
+              src='/sounds/win.wav'
+              playing={true}
+              loop={false}
+            />
+          </>
+
         }
         {
           activeSection === 2 &&
-          <FailSection
-            onClick={playAgain}
-          />
+          <>
+            <FailSection
+              onClick={playAgain}
+            />
+            <ReactHowler
+              src='sounds/lost.mp3'
+              playing={true}
+              loop={false}
+            />
+          </>
         }
       </main>
 
