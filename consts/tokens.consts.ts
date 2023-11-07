@@ -1,3 +1,5 @@
+import { CARDANO_IMG, NEBULA_IMG, SNEK_IMG } from "./image.consts";
+
 export const TOKEN_ARRAY = {
     "ada": {
         value: "ADA",
@@ -7,7 +9,18 @@ export const TOKEN_ARRAY = {
         choices: [
             5, 10, 25, 50, 75, 100
             // 1, 2, 3, 4, 5
-        ]
+        ],
+        image: CARDANO_IMG,
+        gifs: {
+            "Heads": {
+                "win": "/gifs/cardano_aa.gif",
+                "fail": "/gifs/cardano_ab.gif"
+            },
+            "Tails": {
+                "win": "/gifs/cardano_bb.gif",
+                "fail": "/gifs/cardano_ba.gif"
+            },
+        }
     },
     "nebula": {
         value: "NEBULA",
@@ -18,6 +31,17 @@ export const TOKEN_ARRAY = {
             // 5000, 10000, 25000, 50000, 100000, 250000
             100, 200, 300, 400, 500
         ],
+        image: NEBULA_IMG,
+        gifs: {
+            "Heads": {
+                "win": "/gifs/nebula_aa.gif",
+                "fail": "/gifs/nebula_ab.gif"
+            },
+            "Tails": {
+                "win": "/gifs/nebula_bb.gif",
+                "fail": "/gifs/nebula_ba.gif"
+            },
+        }
 
     },
     "snek": {
@@ -28,6 +52,18 @@ export const TOKEN_ARRAY = {
         choices: [
             10000, 40000, 50000, 100000
             // 1000, 2000, 5000, 10000
-        ]
+        ],
+        image: SNEK_IMG,
+        gifs: {
+            "Heads": {
+                "win": "/gifs/snek_aa.gif",
+                "fail": "/gifs/snek_ab.gif"
+            },
+            "Tails": {
+                "win": "/gifs/snek_bb.gif",
+                "fail": "/gifs/snek_ba.gif"
+            },
+        }
+
     },
 }
