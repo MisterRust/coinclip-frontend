@@ -26,8 +26,26 @@ const WinSpinScreen = () => {
         </div>
     )
 }
+interface SpinScreen{
+    gif: string;
+}
+const SpinScreen = ({
+    gif
+}: SpinScreen) => {
+    return (
+        <div className={styles['spin-screen']}>
+            <Image
+                src={gif}
+                alt="nebula-gif"
+                width={250}
+                height={250}
+            />
+        </div>
+    )
+}
 
 export {
     LostSpinScreen,
-    WinSpinScreen
+    WinSpinScreen,
+    SpinScreen
 }
