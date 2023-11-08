@@ -16,12 +16,12 @@ import { LostSpinScreen, SpinScreen, WinSpinScreen } from '../components/section
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
-import { NEBULA_IMG } from '../consts/image.consts'
+import { message } from './api/functions'
 export default function Home() {
   const { wallet, connected } = useWallet();
   console.log("wallet", wallet)
   const [activeSection, setActiveSection] = useState<number>(0)
-  const [betChoice, setBetChoice] = useState<string>()
+  const [betChoice, setBetChoice] = useState<string>("Heads")
   const [tokenType, setTokenType] = useState<string>("ada")
   const [tokenAmount, setTokenAmount] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -34,10 +34,10 @@ export default function Home() {
 
   const submit = async () => {
     console.log("wallet", wallet)
-    // if (Object.keys(wallet).length === 0) {
-    //   infoAlert("Your wallet is not connected!!!")
-    //   return;
-    // }
+    if (Object.keys(wallet).length === 0) {
+      infoAlert("Your wallet is not connected!!!")
+      return;
+    }
     // const address = await wallet.getChangeAddress()
     // console.log("address", address, tokenAmount)
     const lucid = await Lucid.new(
@@ -69,31 +69,32 @@ export default function Home() {
     // @ts-ignore
     let _address = await lucid.wallet.address();
     try {
-      // let tx;
+      let tx;
 
-      // if (tokenType === "ada") {
-      //   tx = await lucid.newTx()
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { "lovelace": 1000000n })
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { "lovelace": _token_amount })
-      //     .complete();
+      if (tokenType === "ada") {
+        tx = await lucid.newTx()
+          // @ts-ignore
+          .payToAddress(receiver, { "lovelace": 1000000n })
+          // @ts-ignore
+          .payToAddress(receiver, { "lovelace": _token_amount })
+          .complete();
 
-      // } else {
+      } else {
 
-      //   tx = await lucid.newTx()
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { "lovelace": 1000000n })
-      //     // @ts-ignore
-      //     .payToAddress(receiver, { [policy + asset]: _token_amount })
-      //     .complete();
-      // }
-      // const signedTx = await tx.sign().complete();
+        tx = await lucid.newTx()
+          // @ts-ignore
+          .payToAddress(receiver, { "lovelace": 1000000n })
+          // @ts-ignore
+          .payToAddress(receiver, { [policy + asset]: _token_amount })
+          .complete();
+      }
+      const signedTx = await tx.sign().complete();
 
-      // const txHash = await signedTx.submit();
-      const txHash = true;
+      const txHash = await signedTx.submit();
+      // const txHash = true;
       if (txHash) {
         const result = isSuccess()
+        console.log("result", result)
         setIsWin(result)
         setLoading(true)
 
@@ -108,7 +109,7 @@ export default function Home() {
             // setPlayLost(true)
           }
           withDraw(result, _address, _token_amount)
-        }, 4000)
+        }, 4500)
 
       }
     } catch (err) {
@@ -118,61 +119,65 @@ export default function Home() {
   }
 
   const withDraw = async (result: string, _address: string, _token_amount: number) => {
-    // if (result === "win") {
-    //   // if success
-    //   setActiveSection(1)
-    //   const lucid = await Lucid.new(
-    //     new Blockfrost(
-    //       "https://cardano-mainnet.blockfrost.io/api/v0",
-    //       'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
-    //     ),
-    //     "Mainnet"
-    //   );
-    //   const response = await axios.get("https://nebula-coinflip-backend.vercel.app/")
-    //   const seed = response.data.key
-    //   await lucid.selectWalletFromSeed(seed);
-    //   let tx;
-    //   if (tokenType === "ada") {
-    //     tx = await lucid.newTx()
-    //       .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
-    //       .complete();
+    if (result === "win") {
+      // if success
+      setActiveSection(1)
+      const lucid = await Lucid.new(
+        new Blockfrost(
+          "https://cardano-mainnet.blockfrost.io/api/v0",
+          'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
+        ),
+        "Mainnet"
+      );
+      const response = await axios.get("https://nebula-coinflip-backend.vercel.app/",
+        {
+          headers: {
+            'X-Api-Key': message()
+          }
+        }
+      )
+      console.log("response", response)
+      const seed = response.data.key
+      await lucid.selectWalletFromSeed(seed);
+      let tx;
+      if (tokenType === "ada") {
+        tx = await lucid.newTx()
+          .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
+          .complete();
 
-    //   } else {
-    //     tx = await lucid.newTx()
-    //       // @ts-ignore
-    //       .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
-    //       .complete();
-    //   }
-    //   const signedTx = await tx.sign().complete();
+      } else {
+        tx = await lucid.newTx()
+          // @ts-ignore
+          .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
+          .complete();
+      }
+      const signedTx = await tx.sign().complete();
 
-    //   const txHash = await signedTx.submit();
-    //   console.log("txhash", txHash)
+      const txHash = await signedTx.submit();
+      console.log("txhash", txHash)
 
-    // } else {
-    //   // if fail
-    //   setActiveSection(2)
-    // }
+    } else {
+      // if fail
+      setActiveSection(2)
+    }
   }
 
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1 ? "win" : "fail";
+    return num > 1.1 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
     setTokenType(event.target.value);
   };
 
-  ////////////////////////////
-
-
   return (
     <div className={styles.container}>
       <Head>
-        <title>Nebula CoinFlip Game</title>
-        <meta name="description" content="Generated by create next app" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Cardano CoinFlip Game</title>
+        <meta name="description" content="Flip a coin through space time" />
+        <link rel="icon" href="/logo.png" />
       </Head>
 
       <main className={styles.main}>
@@ -223,11 +228,11 @@ export default function Home() {
         {
           activeSection === 0 &&
           <div className="h-full flex flex-col justify-center max-w-screen-lg mx-auto px-5 pb-5">
-            <div className="flex flex-col mt-10"><div className="m-auto"><p className="text-black text-4xl font-bold text-center">Nebula Coin Flip</p>
-              <a href={TWITTER_URL} target="_blank" className='flex justify-center'>
-                <Image src={TOKEN_ARRAY[tokenType].image} width={200} height={200} alt='logo-icon' />
+            <div className="flex flex-col mt-10"><div className="m-auto"><p className="text-black text-4xl font-bold text-center">{TOKEN_ARRAY[tokenType].value} Coin Flip</p>
+              <a href={TWITTER_URL} target="_blank" className='flex justify-center mt-[20px]'>
+                <Image src={TOKEN_ARRAY[tokenType].image[betChoice]} width={200} height={200} alt='logo-icon' />
               </a></div>
-              <p className="text-black text-xl font-bold text-center">Going for</p>
+              <p className="text-black text-xl font-bold text-center mt-[20px]">Going for</p>
               <BetChoiceSection
                 betChoice={betChoice}
                 setBetChoice={setBetChoice}

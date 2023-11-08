@@ -1,4 +1,4 @@
-import { CARDANO_IMG, NEBULA_IMG, SNEK_IMG } from "./image.consts";
+import { CARDANO_BACK_IMG, CARDANO_IMG, NEBULA_BACK_IMG, NEBULA_IMG, SNEK_BACK_IMG, SNEK_IMG } from "./image.consts";
 
 export const TOKEN_ARRAY = {
     "ada": {
@@ -10,7 +10,10 @@ export const TOKEN_ARRAY = {
             5, 10, 25, 50, 75, 100
             // 1, 2, 3, 4, 5
         ],
-        image: CARDANO_IMG,
+        image: {
+            "Heads": CARDANO_IMG,
+            "Tails": CARDANO_BACK_IMG,
+        },
         gifs: {
             "Heads": {
                 "win": "/gifs/cardano_aa.gif",
@@ -31,7 +34,10 @@ export const TOKEN_ARRAY = {
             // 5000, 10000, 25000, 50000, 100000, 250000
             100, 200, 300, 400, 500
         ],
-        image: NEBULA_IMG,
+        image: {
+            "Heads": NEBULA_IMG,
+            "Tails": NEBULA_BACK_IMG,
+        },
         gifs: {
             "Heads": {
                 "win": "/gifs/nebula_aa.gif",
@@ -53,7 +59,10 @@ export const TOKEN_ARRAY = {
             10000, 40000, 50000, 100000
             // 1000, 2000, 5000, 10000
         ],
-        image: SNEK_IMG,
+        image: {
+            "Heads": SNEK_IMG,
+            "Tails": SNEK_BACK_IMG,
+        },
         gifs: {
             "Heads": {
                 "win": "/gifs/snek_aa.gif",
