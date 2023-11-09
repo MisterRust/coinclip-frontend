@@ -17,6 +17,7 @@ import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
 import { message } from './api/functions'
+import { useMedia } from 'react-use'
 export default function Home() {
   const { wallet, connected } = useWallet();
   console.log("wallet", wallet)
@@ -28,6 +29,7 @@ export default function Home() {
   const [isWin, setIsWin] = useState<string>();
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost, setPlayLost] = useState<boolean>(false)
+  const isMobile = useMedia('(max-width: 768px)');
   const playAgain = () => {
     location.href = "/"
   }
@@ -204,7 +206,8 @@ export default function Home() {
             loop={false}
           />
         }
-        <div>
+        
+        <div className='pt-[75px]'>
           <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             value={tokenType} onChange={handleTokenType}
           >
