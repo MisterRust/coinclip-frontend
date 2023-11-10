@@ -16,11 +16,14 @@ import { LostSpinScreen, SpinScreen, WinSpinScreen } from '../components/section
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
-import { message } from './api/functions'
+import { getObjectArray, message, setObjectArray } from './api/functions'
 import { useMedia } from 'react-use'
+import { useWalletConnect } from '../context/WalletConnect'
+import { useUserProvider } from '../context/UserProvider'
 export default function Home() {
   const { wallet, connected } = useWallet();
   console.log("wallet", wallet)
+
   const [activeSection, setActiveSection] = useState<number>(0)
   const [betChoice, setBetChoice] = useState<string>("Heads")
   const [tokenType, setTokenType] = useState<string>("ada")
@@ -29,6 +32,8 @@ export default function Home() {
   const [isWin, setIsWin] = useState<string>();
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost, setPlayLost] = useState<boolean>(false)
+  const { walletBalance } = useUserProvider()
+  const { myWalletAddress } = useWalletConnect()
   const isMobile = useMedia('(max-width: 768px)');
   const playAgain = () => {
     location.href = "/"
@@ -105,10 +110,26 @@ export default function Home() {
           setLoading(false)
           if (result === "win") {
             setActiveSection(1)
-            // setPlayWin(true)
+            const msg = {
+              token: tokenType,
+              amount: tokenAmount,
+              win: true
+            }
+            const retrievedArray: any[] = getObjectArray('record-' + myWalletAddress);
+            retrievedArray.push(msg);
+            setObjectArray(('record-' + myWalletAddress), retrievedArray)
+            setPlayWin(true)
           } else {
             setActiveSection(2)
+            const msg = {
+              token: tokenType,
+              amount: tokenAmount,
+              win: false
+            }
             // setPlayLost(true)
+            const retrievedArray: any[] = getObjectArray('record-' + myWalletAddress);
+            retrievedArray.push(msg);
+            setObjectArray(('record-' + myWalletAddress), retrievedArray)
           }
           withDraw(result, _address, _token_amount)
         }, 4500)
@@ -167,7 +188,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.1 ? "win" : "fail";
+    return num > 0.1 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
@@ -210,6 +231,18 @@ export default function Home() {
         }
 
         <div className='pt-[75px]'>
+          <div>
+            <div className='flex justify-center'>
+              ADA: {
+                // @ts-ignore
+                walletBalance && walletBalance['ada'] && (parseInt(walletBalance['ada']) / 1000000).toFixed(0)
+              }
+            </div>
+            {/* SNEK:
+            NEBULA: */}
+          </div>
+          <br />
+          
           <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             value={tokenType} onChange={handleTokenType}
           >
@@ -263,7 +296,7 @@ export default function Home() {
               >
                 <p className="text-bold text-xl">Double or nothing</p>
               </button>
-              <button className="mt-5"><a className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</a></button>
+              <button className="mt-5"><a href='/myrecord' className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</a></button>
             </div>
           </div>
         }

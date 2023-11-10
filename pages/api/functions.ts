@@ -30,3 +30,11 @@ export function message() {
 }
 
 
+export function getObjectArray(key) {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : [];
+}
+
+export function setObjectArray(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
