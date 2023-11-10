@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link';
 import React from 'react'
 interface Props{
     onClick: () =>void;
@@ -15,7 +16,7 @@ const SuccessSection = (
             <button className="mt-10 m-auto text-white bg-[#008BF0] w-60 h-10 text-sm rounded-full border border-[#008BF0]" onClick={onClick}>
                 <p className="text-bold text-xl">Play Again</p>
             </button>
-            <button className="mt-10"><a  href = "/myrecord" className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</a></button><p className=" text-black mt-10 text-center text-lg text-bold">Share the result</p><div className="flex flex-row justify-center">
+            <button className="mt-10"><Link href = "/myrecord" className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</Link></button><p className=" text-black mt-10 text-center text-lg text-bold">Share the result</p><div className="flex flex-row justify-center">
                 {/* <button title="Wow, I just doubled my ADA check it out!" aria-label="facebook" className="react-share__ShareButton w-8" style="background-color: transparent; border: none; padding: 0px; font: inherit; color: inherit; cursor: pointer;">
                     <img src="/01a470d813915c298403.png" /></button>
                 <button aria-label="twitter" className="react-share__ShareButton w-8 ml-2" style="background-color: transparent; border: none; padding: 0px; font: inherit; color: inherit; cursor: pointer;">

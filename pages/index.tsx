@@ -20,6 +20,7 @@ import { getObjectArray, message, setObjectArray } from './api/functions'
 import { useMedia } from 'react-use'
 import { useWalletConnect } from '../context/WalletConnect'
 import { useUserProvider } from '../context/UserProvider'
+import Link from 'next/link'
 export default function Home() {
   const { wallet, connected } = useWallet();
   console.log("wallet", wallet)
@@ -296,7 +297,7 @@ export default function Home() {
               >
                 <p className="text-bold text-xl">Double or nothing</p>
               </button>
-              <button className="mt-5"><a href='/myrecord' className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</a></button>
+              <button className="mt-5"><Link href='/myrecord' className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</Link></button>
             </div>
           </div>
         }
