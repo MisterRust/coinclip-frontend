@@ -180,6 +180,8 @@ export default function Home() {
         <title>Cardano CoinFlip Game</title>
         <meta name="description" content="Flip a coin through space time" />
         <link rel="icon" href="/logo.png" />
+
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></link>
       </Head>
 
       <main className={styles.main}>
@@ -206,7 +208,7 @@ export default function Home() {
             loop={false}
           />
         }
-        
+
         <div className='pt-[75px]'>
           <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             value={tokenType} onChange={handleTokenType}

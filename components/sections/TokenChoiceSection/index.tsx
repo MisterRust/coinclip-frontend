@@ -29,7 +29,7 @@ const TokenChoiceSection = ({
                             className={`${styles['ada-option']} ${tokenAmount === choice ? styles.active : ''}`}
                             onClick={() => setTokenAmount(choice)}
                         >
-                            {getExactFormatValue(choice)} {TOKEN_ARRAY[tokenType].value}
+                            {getExactFormatValue(choice)}
                         </button>
                     )
                 })
