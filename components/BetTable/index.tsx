@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Card, Typography } from "@material-tailwind/react";
 import styles from './index.module.css'
 import { Record } from '../../utils/types';
@@ -19,15 +19,18 @@ const BetTable = () => {
     const walletAddr = useAddress();
     console.log("BetTable address", walletAddr)
 
-    const getAllFlipsData = async () => {
+    const getAllFlipsData = useCallback(async () => {
         const flipData = await getAllFlips();
         setAllRecords(flipData)
-    }
+    }, [])
 
-    const getMyFlipsData = async () => {
-        const flipData = await getMyFlips(walletAddr)
-        setAllRecords(flipData)
-    }
+    const getMyFlipsData = useCallback(async () => {
+        if (walletAddr !== undefined) {
+            const flipData = await getMyFlips(walletAddr)
+            setAllRecords(flipData)
+        }
+
+    }, [walletAddr])
 
     const handleShowRecordChange = (record) => {
         setShowRecord(record);
@@ -37,11 +40,11 @@ const BetTable = () => {
         if (showRecord === 0) {
             getAllFlipsData();
         }
-        if (showRecord === 1 && walletAddr !== undefined) {
+        if (showRecord === 1) {
             getMyFlipsData()
         }
 
-    }, [showRecord, walletAddr])
+    }, [showRecord])
 
     useEffect(() => {
         if (width < breakpoint) {

@@ -22,38 +22,6 @@ const ConnectWalletButtons = () => {
 
     // console.log("address----", address)
 
-    useEffect(() => {
-        const storedWallet = localStorage.getItem("selectedWallet");
-        if (storedWallet) {
-            setSelectedWallet(JSON.parse(storedWallet));
-            connect(JSON.parse(storedWallet).name);
-        }
-    }, []);
-
-    //   useEffect(() => {
-    //     console.log("address connected>>>", address);
-    //     if (connected && address) {
-    //       (async () => {
-    //         const res = await getAmount(address);
-    //     console.log("game balance", res)
-
-    //         setInterval(async () => {
-    //           const balance = await wallet.getBalance();
-    //           setCurrentBalance(balance[0].quantity / 1000000);
-    //         }, 1000);
-    //         if (res) {
-    //           setGameBalance({
-    //             ada: res.ada_balance,
-    //             dum: res.dum_balance,
-    //             nebula: res.nebula_balance,
-    //             konda: res.konda_balance,
-    //             snek: res.snek_balance
-    //           });
-    //         }
-    //       })();
-    //     }
-    //   }, [wallet, address]);
-
     const handleWalletSelection = async (myWallet: any) => {
         localStorage.setItem("selectedWallet", JSON.stringify(myWallet));
 
@@ -88,6 +56,40 @@ const ConnectWalletButtons = () => {
     const handleDropdown = () => {
         setIsOpen(!isOpen);
     };
+
+    useEffect(() => {
+        const storedWallet = localStorage.getItem("selectedWallet");
+        if (storedWallet) {
+            setSelectedWallet(JSON.parse(storedWallet));
+            connect(JSON.parse(storedWallet).name);
+        }
+    }, [connect]);
+
+    //   useEffect(() => {
+    //     console.log("address connected>>>", address);
+    //     if (connected && address) {
+    //       (async () => {
+    //         const res = await getAmount(address);
+    //     console.log("game balance", res)
+
+    //         setInterval(async () => {
+    //           const balance = await wallet.getBalance();
+    //           setCurrentBalance(balance[0].quantity / 1000000);
+    //         }, 1000);
+    //         if (res) {
+    //           setGameBalance({
+    //             ada: res.ada_balance,
+    //             dum: res.dum_balance,
+    //             nebula: res.nebula_balance,
+    //             konda: res.konda_balance,
+    //             snek: res.snek_balance
+    //           });
+    //         }
+    //       })();
+    //     }
+    //   }, [wallet, address]);
+
+
 
     return (
         <>

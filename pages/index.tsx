@@ -1,8 +1,6 @@
 "use client"
 import Head from 'next/head'
 import Image from 'next/image'
-import { Card, Typography } from "@material-tailwind/react";
-
 import styles from '../styles/Home.module.css'
 import Header from '../components/layouts/Header'
 import FailSection from '../components/sections/FailSection'
