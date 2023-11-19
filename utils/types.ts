@@ -19,9 +19,18 @@ export interface TransactionType {
     address: string;
     hash: string;
     status: string;
-  }
+}
 
 export interface RankingDataType {
     address: string;
-    amount : number;
+    amount: number;
+}
+
+
+export interface Record {
+    addr: string;
+    created_at: number;
+    token: string;
+    amount: number;
+    result: true;
 }

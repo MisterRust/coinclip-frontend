@@ -1,7 +1,7 @@
 .btn-choice {
-    @apply text-white bg-[#008BF0] w-36 h-10 text-sm rounded-full border-4 border-[#008BF0];
+    @apply text-white bg-[#0d0f18] w-[117px] h-12 text-[16px] font-semibold rounded-[12px] border-4 border-[#0d0f18];
 }
 
 .btn-choice.active {
-    @apply bg-white text-[#008BF0];
+    @apply bg-[#2862ff] text-white;
 }

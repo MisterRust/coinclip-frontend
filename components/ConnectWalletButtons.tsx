@@ -15,7 +15,7 @@ const ConnectWalletButtons = () => {
     const userContext = useContext(UserContext);
 
     // Destructure context values with default functions to avoid null issues
-    const { setAddress = () => { }, setUserWallet = () => { } } = userContext || {};
+    const { setAddress = () => { }, setUserWallet = () => { }, setWalletName = () => { } } = userContext || {};
 
     const [currentBalance, setCurrentBalance] = useState<number>();
     const { walletBalance, myWalletAddress } = useWalletConnect()
@@ -58,8 +58,12 @@ const ConnectWalletButtons = () => {
 
     const handleWalletSelection = async (myWallet: any) => {
         localStorage.setItem("selectedWallet", JSON.stringify(myWallet));
+
         setSelectedWallet(myWallet);
         connect(myWallet.name);
+        // console.log("myWallet.name", myWallet.name)
+        localStorage.setItem("coinflip_wallet_name", myWallet.name.toLowerCase());
+        setWalletName(myWallet.name.toLowerCase())
         setAddress(address);
         setUserWallet(wallet);
 
@@ -79,6 +83,7 @@ const ConnectWalletButtons = () => {
 
     const handleDisconnect = () => {
         localStorage.removeItem("selectedWallet");
+        localStorage.removeItem("coinflip_wallet_name");
         disconnect();
         setSelectedWallet(null);
     };
@@ -89,25 +94,27 @@ const ConnectWalletButtons = () => {
     return (
         <>
             <button
-                className="flex items-center text-sm font-black rounded-lg border-2 border-black h-12  uppercase duration-300 px-8 py-2 text-black group relative"
+                className="flex items-center text-sm font-white rounded-lg border-2 border-white h-12  uppercase duration-300 px-8 py-2 text-white group relative"
                 onClick={() => handleDropdown()}
                 style={{
                     width: connected ? 180 : "auto"
                 }}
             >
-                {connected ? (
-                    address && address.slice(0,5) + "..." + address.slice(-4)
-                ) : (
-                    <>
-                        Connect Wallet
-                        {/* <DownArrow className="group-hover:rotate-180" /> */}
-                    </>
-                )}
+                {
+                    connected ? (
+                        address && address.slice(0, 5) + "..." + address.slice(-4)
+                    ) : (
+                        <>
+                            CONNECT WALLET
+                            {/* <DownArrow className="group-hover:rotate-180" /> */}
+                        </>
+                    )
+                }
                 {connected && (
                     <div className="hidden group-hover:block absolute left-0 top-[40px] w-full">
                         {selectedWallet && (
                             <button
-                                className="text-black border-2 py-2.5 px-5 rounded-md cursor-pointer capitalize mt-2.5 w-full"
+                                className="text-white border-2 py-2.5 px-5 rounded-md cursor-pointer capitalize mt-2.5 w-full"
                                 onClick={() => handleDisconnect()}
                             >
                                 disconnect
@@ -117,7 +124,7 @@ const ConnectWalletButtons = () => {
                 )}
             </button>
             {!connected && isOpen && (
-                <div className="text-sm font-black h-12 uppercase  duration-300 border-black">
+                <div className="text-sm font-white h-12 uppercase  duration-300 border-white">
                     {!selectedWallet && !connecting && (
                         <ul className="px-4 border-2 border-white rounded-lg bg-white">
                             {walletLists.map((walletlist) => (

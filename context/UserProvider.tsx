@@ -11,6 +11,8 @@ export interface UserContextProps {
   address: string;
   setUserWallet: Function;
   userwallet: any;
+  setWalletName?: Function;
+  walletName?: string;
   isConnected: boolean;
   setIsConnected: Function;
 }
@@ -25,6 +27,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   });
   const [address, setAddress] = useState("");
   const [userwallet, setUserWallet] = useState("");
+  const [walletName, setWalletName] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const { connect, disconnect, connecting, wallet, connected } = useWallet();
   const walletAddress = useAddress();
@@ -33,7 +36,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const getMyBalance = async () => {
     const { data } = await axios.get(
-        `https://qzkubt0k1g.execute-api.eu-west-2.amazonaws.com/default/getWalletInfo?address=${walletAddress}`
+      `https://qzkubt0k1g.execute-api.eu-west-2.amazonaws.com/default/getWalletInfo?address=${walletAddress}`
     );
 
     const result = await axios.get(" https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd");
@@ -42,23 +45,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     let obj = {};
 
     for (let i = 0; i < data.length; i++) {
-        const element = data[i];
-        if (element.name) {
-            obj[element.name.value] = parseInt(element.quantity);
-        }
+      const element = data[i];
+      if (element.name) {
+        obj[element.name.value] = parseInt(element.quantity);
+      }
     }
 
     obj['ada'] = parseInt(data[data.length - 1].lovelace);
     // obj['loading'] = false;
     obj['usd'] = (parseInt(data[data.length - 1].lovelace) / 1000000 * parseFloat(exchangeRate)).toFixed(0).toString()
-walletAddress
+    walletAddress
     console.log("pay obj", obj)
     // @ts-ignore
     setWalletBalance(obj)
-}
-  useEffect(() =>{
+  }
+  useEffect(() => {
     console.log("What?")
-    if(walletAddress && walletAddress !== ""){
+    if (walletAddress && walletAddress !== "") {
       console.log("hey good", walletAddress)
       getMyBalance()
     }
@@ -67,6 +70,8 @@ walletAddress
   return (
     <UserContext.Provider
       value={{
+        walletName,
+        setWalletName,
         setAddress,
         walletBalance,
         setWalletBalance,

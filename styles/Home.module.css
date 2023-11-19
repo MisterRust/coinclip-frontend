@@ -1,5 +1,6 @@
 .container {
   padding: 0 2rem;
+  background-color: #131621;
 }
 
 .main {
@@ -129,11 +130,13 @@
 }
 
 .btn-submit{
-  @apply mt-5 m-auto text-white bg-[#008BF0] w-60 h-10 text-sm rounded-full border border-[#008BF0];
+  @apply mt-5 m-auto text-white bg-[#286eff] w-36 h-14 text-sm rounded-[12px] border border-[#4a85ff] border-[2px];
 }
 
 .btn-submit:disabled{
   cursor: not-allowed;
 }
+
+
 
 

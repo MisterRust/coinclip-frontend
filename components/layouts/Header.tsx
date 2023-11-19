@@ -21,26 +21,24 @@ const Header = () => {
     }, []);
 
     return (
-        <>
-            <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-gray-200 dark:border-gray-600 z-[10]">
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <div className="flex items-center cursor-pointer" onClick={() => {
-                        location.href = "/"
-                    }}>
-                        <Image src={`/logo.png`} width={70} height={70} alt='logo-icon' style={{ filter: `hue-rotate(${deg}deg)` }}
+        <nav className="bg-[#131621] dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-gray-200 dark:border-gray-600 z-[10]">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                <div className="flex items-center cursor-pointer" onClick={() => {
+                    location.href = "/"
+                }}>
+                    <Image src={`/logo.png`} width={70} height={70} alt='logo-icon' style={{ filter: `hue-rotate(${deg}deg)` }}
 
-                        />
+                    />
 
-                        {/* <span className="text-[10px]">Nebula Gaming</span> */}
-                    </div>
-                    <div className="flex md:order-2 gap-[10px]">
-                        <div>
-                            <ConnectWalletButtons />
-                        </div>
+                    {/* <span className="text-[10px]">Nebula Gaming</span> */}
+                </div>
+                <div className="flex md:order-2 gap-[10px]">
+                    <div>
+                        <ConnectWalletButtons />
                     </div>
                 </div>
-            </nav>
-        </>
+            </div>
+        </nav>
     );
 };
 

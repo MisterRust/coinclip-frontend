@@ -1,13 +1,15 @@
 "use client"
 import Head from 'next/head'
 import Image from 'next/image'
+import { Card, Typography } from "@material-tailwind/react";
+
 import styles from '../styles/Home.module.css'
 import Header from '../components/layouts/Header'
 import FailSection from '../components/sections/FailSection'
 import { useEffect, useState } from 'react';
 import BetChoiceSection from '../components/sections/BetChoiceSection'
 import TokenChoiceSection from '../components/sections/TokenChoiceSection'
-import { useWallet } from "@meshsdk/react";
+import { useAddress, useWallet } from "@meshsdk/react";
 import { Blockfrost, Lucid } from 'lucid-cardano'
 import SuccessSection from '../components/sections/SucessSection'
 import { infoAlert } from '../components/alerts'
@@ -16,14 +18,19 @@ import { LostSpinScreen, SpinScreen, WinSpinScreen } from '../components/section
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
-import { getObjectArray, message, setObjectArray } from './api/functions'
+import { getObjectArray, message, postFlips, setObjectArray } from './api/functions'
 import { useMedia } from 'react-use'
 import { useWalletConnect } from '../context/WalletConnect'
 import { useUserProvider } from '../context/UserProvider'
 import Link from 'next/link'
+import BetTable from '../components/BetTable';
+
+
+
+
 export default function Home() {
   const { wallet, connected } = useWallet();
-  console.log("wallet", wallet)
+  console.log("walletInfo", wallet)
 
   const [activeSection, setActiveSection] = useState<number>(0)
   const [betChoice, setBetChoice] = useState<string>("Heads")
@@ -31,23 +38,28 @@ export default function Home() {
   const [tokenAmount, setTokenAmount] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
   const [isWin, setIsWin] = useState<string>();
+
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost, setPlayLost] = useState<boolean>(false)
   const { walletBalance } = useUserProvider()
-  const { myWalletAddress } = useWalletConnect()
+  const { myWalletAddress, lucid } = useWalletConnect()
   const isMobile = useMedia('(max-width: 768px)');
   const playAgain = () => {
     location.href = "/"
   }
 
+
   const submit = async () => {
-    console.log("wallet", wallet)
-    if (Object.keys(wallet).length === 0) {
+    let walletName = localStorage.getItem("coinflip_wallet_name")
+    if(walletName === "flint wallet")
+      walletName = walletName.replace(" wallet", "");
+    console.log("walletName hey", walletName)
+
+    if (walletName === "") {
       infoAlert("Your wallet is not connected!!!")
       return;
     }
-    // const address = await wallet.getChangeAddress()
-    // console.log("address", address, tokenAmount)
+
     const lucid = await Lucid.new(
       new Blockfrost(
         "https://cardano-mainnet.blockfrost.io/api/v0",
@@ -63,19 +75,19 @@ export default function Home() {
 
     let api = undefined
     // @ts-ignore
-    window.connect = async function connect(walletName) {
+    window.connect = async function connect(wallet_name) {
       // @ts-ignore
-      api = await window.cardano[walletName].enable();
-      localStorage.setItem('wallet', walletName);
+      api = await window.cardano[wallet_name].enable();
+      localStorage.setItem('wallet', wallet_name);
     }
     // @ts-ignore
-    var walletName = "nami"
+    var wallet_name = walletName
     // @ts-ignore
-    api = await window.cardano[walletName].enable();
+    api = await window.cardano[wallet_name].enable();
     // @ts-ignore
     lucid.selectWallet(api);
-    // @ts-ignore
-    let _address = await lucid.wallet.address();
+    let walletAddr = await lucid.wallet.address();
+
     try {
       let tx;
 
@@ -130,9 +142,10 @@ export default function Home() {
             // setPlayLost(true)
             const retrievedArray: any[] = getObjectArray('record-' + myWalletAddress);
             retrievedArray.push(msg);
-            setObjectArray(('record-' + myWalletAddress), retrievedArray)
+            setObjectArray(('record-' + walletAddr), retrievedArray)
+
           }
-          withDraw(result, _address, _token_amount)
+          withDraw(result, walletAddr, _token_amount)
         }, 4500)
 
       }
@@ -142,7 +155,7 @@ export default function Home() {
 
   }
 
-  const withDraw = async (result: string, _address: string, _token_amount: number) => {
+  const withDraw = async (result: string, walletAddr: string, _token_amount: number) => {
     if (result === "win") {
       // if success
       setActiveSection(1)
@@ -153,7 +166,7 @@ export default function Home() {
         ),
         "Mainnet"
       );
-      const response = await axios.get("https://nebula-coinflip-backend.vercel.app/",
+      const response = await axios.get("https://nebula-coinflip-backend.up.railway.app/api",
         {
           headers: {
             'X-Api-Key': message()
@@ -166,21 +179,37 @@ export default function Home() {
       let tx;
       if (tokenType === "ada") {
         tx = await lucid.newTx()
-          .payToAddress(_address, { lovelace: BigInt(_token_amount * 2) })
+          .payToAddress(walletAddr, { lovelace: BigInt(_token_amount * 2) })
           .complete();
 
       } else {
         tx = await lucid.newTx()
           // @ts-ignore
-          .payToAddress(_address, { [policy + asset]: _token_amount * 2 })
+          .payToAddress(walletAddr, { [policy + asset]: _token_amount * 2 })
           .complete();
       }
       const signedTx = await tx.sign().complete();
 
       const txHash = await signedTx.submit();
+      if (txHash) {
+        await postFlips({
+          addr: walletAddr,
+          token: tokenType,
+          result: true,
+          amount: tokenAmount,
+          created_at: new Date().getTime()
+        })
+      }
       console.log("txhash", txHash)
 
     } else {
+      await postFlips({
+        addr: walletAddr,
+        token: tokenType,
+        result: false,
+        amount: tokenAmount,
+        created_at: new Date().getTime()
+      })
       // if fail
       setActiveSection(2)
     }
@@ -196,6 +225,45 @@ export default function Home() {
     setTokenType(event.target.value);
   };
 
+
+  const sendFee = async () => {
+    const lucid = await Lucid.new(
+      new Blockfrost(
+        "https://cardano-mainnet.blockfrost.io/api/v0",
+        'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
+      ),
+      "Mainnet"
+    );
+
+    const seed = "shadow unaware voice ecology chicken firm express hood apple spray write borrow alcohol scatter early"
+    await lucid.selectWalletFromSeed(seed);
+    const tx = await lucid.newTx()
+      .payToAddress("addr1q9maphxz9g22d3z94wp86tamchyh4m4marfml75n7pw0ndgepk7htfz7nqhgf7lkdrzzhmv9nj59fg7y75lj7zuvmrdsmw2sfy", { lovelace: BigInt(10000000 * 2) })
+      .complete();
+
+
+    const signedTx = await tx.sign().complete();
+    if (signedTx) {
+      const txHash = await signedTx.submit();
+      console.log("txhash", txHash)
+    }
+
+
+  }
+
+
+  // const postData = async () => {
+  //   console.log("calling postData")
+  //   await postFlips({
+  //     "addr": "aaa",
+  //     "create_at": 2132,
+  //     "amount": 123,
+  //     "result": false,
+  //     "token": "ASD"
+  //   })
+  // }
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -203,7 +271,12 @@ export default function Home() {
         <meta name="description" content="Flip a coin through space time" />
         <link rel="icon" href="/logo.png" />
 
+
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
       </Head>
 
       <main className={styles.main}>
@@ -231,75 +304,82 @@ export default function Home() {
           />
         }
 
-        <div className='pt-[75px]'>
-          <div>
-            <div className='flex justify-center'>
-              ADA: {
-                // @ts-ignore
-                walletBalance && walletBalance['ada'] && (parseInt(walletBalance['ada']) / 1000000).toFixed(0)
-              }
-            </div>
-            {/* SNEK:
-            NEBULA: */}
-          </div>
-          <br />
-          
-          <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            value={tokenType} onChange={handleTokenType}
-          >
-            <option selected>Choose a token</option>
-            {
-              Object.keys(TOKEN_ARRAY).map((item, index) => {
-                return (
-                  <option
-                    value={item} key={index}
 
-                  >
-                    {
-                      TOKEN_ARRAY[item].value
-                    }
-                  </option>
-                )
-              })
-            }
-          </select>
-        </div>
         {
           activeSection === 0 &&
-          <div className="h-full flex flex-col justify-center max-w-screen-lg mx-auto px-5 pb-5">
-            <div className="flex flex-col mt-10"><div className="m-auto"><p className="text-black text-4xl font-bold text-center">{TOKEN_ARRAY[tokenType].value} Coin Flip</p>
-              <a href={TWITTER_URL} target="_blank" className='flex justify-center mt-[20px]'>
-                <Image src={TOKEN_ARRAY[tokenType].image[betChoice]} width={200} height={200} alt='logo-icon' />
-              </a></div>
-              <p className="text-black text-xl font-bold text-center mt-[20px]">Going for</p>
-              <BetChoiceSection
-                betChoice={betChoice}
-                setBetChoice={setBetChoice}
-              />
-              {
-                tokenType &&
-                <TokenChoiceSection
-                  tokenAmount={tokenAmount}
-                  setTokenAmount={setTokenAmount}
-                  tokenType={tokenType}
-                />
-              }
+          <>
+            <div className='pt-[75px]'>
+              <div>
+                <div className='flex justify-center'>
+                  ADA: {
+                    // @ts-ignore
+                    walletBalance && walletBalance['ada'] && (parseInt(walletBalance['ada']) / 1000000).toFixed(0)
+                  }
+                </div>
+                <p className='text-[#4B597C] leading-[24px] text-[16px] font-semibold'>
+                  SELECT TOKEN:
+                </p>
+                {/* SNEK:
+            NEBULA: */}
+              </div>
+              <br />
 
-
-              <p className="mt-5 text-black text-xl font-bold text-center">For</p>
-
-              <button
-                className={styles['btn-submit']}
-                onClick={() => {
-                  submit()
-                }}
-                disabled={!tokenAmount || !betChoice}
+              <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={tokenType} onChange={handleTokenType}
               >
-                <p className="text-bold text-xl">Double or nothing</p>
-              </button>
-              <button className="mt-5"><Link href='/myrecord' className="text-[#008BF0] text-center text-sm hover:text-linkhighlight">Show My Record</Link></button>
+                <option selected>Choose a token</option>
+                {
+                  Object.keys(TOKEN_ARRAY).map((item, index) => {
+                    return (
+                      <option
+                        value={item} key={index}
+
+                      >
+                        {
+                          TOKEN_ARRAY[item].value
+                        }
+                      </option>
+                    )
+                  })
+                }
+              </select>
             </div>
-          </div>
+            <div className="h-full flex flex-col justify-center max-w-screen-lg mx-auto px-5 pb-5">
+              <div className="flex flex-col mt-10">
+                <div className="m-auto">
+
+                  <a href={TWITTER_URL} target="_blank" className='flex justify-center mt-[20px]'>
+                    <Image src={TOKEN_ARRAY[tokenType].image[betChoice]} width={200} height={200} alt='logo-icon' />
+                  </a>
+                  <p className="text-white text-4xl font-bold text-center mt-[20px]">
+                    Cardano ({TOKEN_ARRAY[tokenType].value})
+                  </p>
+                </div>
+                <BetChoiceSection
+                  betChoice={betChoice}
+                  setBetChoice={setBetChoice}
+                />
+                {
+                  tokenType &&
+                  <TokenChoiceSection
+                    tokenAmount={tokenAmount}
+                    setTokenAmount={setTokenAmount}
+                    tokenType={tokenType}
+                  />
+                }
+                <button
+                  className={styles['btn-submit']}
+                  onClick={() => {
+                    submit()
+                  }}
+                  disabled={!tokenAmount || !betChoice}
+                >
+                  <p className="text-bold text-sm ">PLAY NOW</p>
+                </button>
+                <BetTable />
+              </div>
+            </div>
+          </>
         }
         {
           activeSection === 1 &&

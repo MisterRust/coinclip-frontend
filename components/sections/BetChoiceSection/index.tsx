@@ -14,7 +14,7 @@ const BetChoiceSection = ({
 
     const choices: string[] = ["Heads", "Tails"]
     return (
-        <div className="mt-5 inline-flex rounded-full m-auto bg-[#008BF0]">
+        <div className="mt-5 inline-flex rounded-full m-auto bg-[#0d0f18]">
             {
                 choices.map((choice: string, index: number) => {
                     return (

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export function message() {
 
     const utcDate = new Date();
@@ -37,4 +39,49 @@ export function getObjectArray(key) {
 
 export function setObjectArray(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
-  }
+}
+
+export const postFlips = async (reqData: any) => {
+    console.log("calling postFlips", reqData)
+    try {
+        const response = await axios.post("https://nebula-coinflip-backend.up.railway.app/flips",
+            JSON.stringify(reqData),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        // Handle the response as needed
+        console.log(response.data);
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+    }
+}
+
+export const getAllFlips = async () => {
+    console.log("calling getFlips")
+    try {
+        const response = await axios.get("https://nebula-coinflip-backend.up.railway.app/flips");
+        console.log("getFlips response", response.data)
+        return response.data.reverse()
+    } catch (error) {
+        // Handle errors
+        console.error("getFlips error", error);
+    }
+}
+
+export const getMyFlips = async (addr: string) => {
+    console.log("calling getFlips")
+    try {
+        const response = await axios.get("https://nebula-coinflip-backend.up.railway.app/flips/" + addr);
+        console.log("getFlips response", response.data)
+        return response.data.reverse()
+    } catch (error) {
+        // Handle errors
+        console.error("getFlips error", error);
+    }
+}
+

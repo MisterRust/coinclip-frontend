@@ -1,0 +1,23 @@
+.bet-record_active{
+    border-radius: 12px;
+    border: 2px solid #56658C;
+  
+    background: #4B597C;
+    color: #FFF;
+  
+    font-family: Oxanium;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    padding: 8px 16px;
+  }
+  .bet-record{
+    color: #5E657B;
+    font-family: Oxanium;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    padding: 8px 16px;
+  }
