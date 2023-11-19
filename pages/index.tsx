@@ -40,12 +40,12 @@ export default function Home() {
     location.href = "/"
   }
   const submit = async () => {
-    let walletName = localStorage.getItem("coinflip_wallet_name")
+    let walletName = localStorage.getItem("coinflip_walletname")
     if(walletName === "flint wallet")
       walletName = walletName.replace(" wallet", "");
     console.log("walletName hey", walletName)
 
-    if (walletName === "") {
+    if (walletName === null) {
       infoAlert("Your wallet is not connected!!!")
       return;
     }

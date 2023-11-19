@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect, useContext } from "react";
 import { useWallet, useWalletList, useAddress } from "@meshsdk/react";
 import Image from "next/image";
@@ -5,12 +6,12 @@ import { DownArrow } from "./SvgIcons";
 
 import { GameContext } from "../context/GameProvider";
 import { UserContext } from "../context/UserProvider";
+
 const ConnectWalletButtons = () => {
     const [selectedWallet, setSelectedWallet] = useState(null);
 
     const { connect, disconnect, connecting, wallet, connected } = useWallet();
     const [isOpen, setIsOpen] = useState<boolean>(false);
-
     const userContext = useContext(UserContext);
 
     // Destructure context values with default functions to avoid null issues
@@ -19,7 +20,11 @@ const ConnectWalletButtons = () => {
     const [currentBalance, setCurrentBalance] = useState<number>();
     const walletLists = useWalletList();
     const address = useAddress();
-
+    let wallet_name;
+    if (typeof window !== 'undefined') {
+        // Perform localStorage action
+        wallet_name = localStorage.getItem("selectedWallet");
+    }
     // console.log("address----", address)
 
     const handleWalletSelection = async (myWallet: any) => {
@@ -28,7 +33,7 @@ const ConnectWalletButtons = () => {
         setSelectedWallet(myWallet);
         connect(myWallet.name);
         // console.log("myWallet.name", myWallet.name)
-        localStorage.setItem("coinflip_wallet_name", myWallet.name.toLowerCase());
+        localStorage.setItem("coinflip_walletname", myWallet.name.toLowerCase());
         setWalletName(myWallet.name.toLowerCase())
         setAddress(address);
         setUserWallet(wallet);
@@ -49,7 +54,7 @@ const ConnectWalletButtons = () => {
 
     const handleDisconnect = () => {
         localStorage.removeItem("selectedWallet");
-        localStorage.removeItem("coinflip_wallet_name");
+        localStorage.removeItem("coinflip_walletname");
         disconnect();
         setSelectedWallet(null);
     };
@@ -101,7 +106,7 @@ const ConnectWalletButtons = () => {
                 }}
             >
                 {
-                    connected ? (
+                    wallet_name !== null && connected ? (
                         address && address.slice(0, 5) + "..." + address.slice(-4)
                     ) : (
                         <>

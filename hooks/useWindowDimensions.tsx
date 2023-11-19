@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 
+let hasWindow = typeof window !== "undefined"
 export const useWindowDimensions = () => {
     const [windowDimensions, setWindowDimensions] = useState(
         getWindowDimensions()
     )
-    const hasWindow = typeof window !== "undefined"
+    
 
     useEffect(() => {
         if (hasWindow) {
