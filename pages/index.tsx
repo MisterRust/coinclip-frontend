@@ -26,9 +26,6 @@ import BetTable from '../components/BetTable';
 
 
 export default function Home() {
-  const { wallet, connected } = useWallet();
-  console.log("walletInfo", wallet)
-
   const [activeSection, setActiveSection] = useState<number>(0)
   const [betChoice, setBetChoice] = useState<string>("Heads")
   const [tokenType, setTokenType] = useState<string>("ada")
@@ -37,13 +34,11 @@ export default function Home() {
   const [isWin, setIsWin] = useState<string>();
 
   const [playWin, setPlayWin] = useState<boolean>(false)
-  const [playLost, setPlayLost] = useState<boolean>(false)
+  const [playLost] = useState<boolean>(false)
   const { walletBalance } = useUserProvider()
   const playAgain = () => {
     location.href = "/"
   }
-
-
   const submit = async () => {
     let walletName = localStorage.getItem("coinflip_wallet_name")
     if(walletName === "flint wallet")
@@ -221,55 +216,13 @@ export default function Home() {
   };
 
 
-  const sendFee = async () => {
-    const lucid = await Lucid.new(
-      new Blockfrost(
-        "https://cardano-mainnet.blockfrost.io/api/v0",
-        'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
-      ),
-      "Mainnet"
-    );
-
-    const seed = "shadow unaware voice ecology chicken firm express hood apple spray write borrow alcohol scatter early"
-    await lucid.selectWalletFromSeed(seed);
-    const tx = await lucid.newTx()
-      .payToAddress("addr1q9maphxz9g22d3z94wp86tamchyh4m4marfml75n7pw0ndgepk7htfz7nqhgf7lkdrzzhmv9nj59fg7y75lj7zuvmrdsmw2sfy", { lovelace: BigInt(10000000 * 2) })
-      .complete();
-
-
-    const signedTx = await tx.sign().complete();
-    if (signedTx) {
-      const txHash = await signedTx.submit();
-      console.log("txhash", txHash)
-    }
-
-
-  }
-
-
-  // const postData = async () => {
-  //   console.log("calling postData")
-  //   await postFlips({
-  //     "addr": "aaa",
-  //     "create_at": 2132,
-  //     "amount": 123,
-  //     "result": false,
-  //     "token": "ASD"
-  //   })
-  // }
-
-
   return (
     <div className={styles.container}>
       <Head>
         <title>Cardano CoinFlip Game</title>
         <meta name="description" content="Flip a coin through space time" />
         <link rel="icon" href="/logo.png" />
-
-
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></link>
         <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
       </Head>
