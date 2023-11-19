@@ -10,7 +10,6 @@ import { UserContext, UserProvider } from "../../context/UserProvider";
 import { useMedia } from "react-use";
 const Header = () => {
     const [deg, setDeg] = useState<number>(0);
-    const isMobile = useMedia('(max-width: 768px)');
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -28,7 +27,7 @@ const Header = () => {
                 }}>
                     <Image src={`/logo.png`} width={70} height={70} alt='logo-icon' style={{ filter: `hue-rotate(${deg}deg)` }}
 
-                    />
+                />
 
                     {/* <span className="text-[10px]">Nebula Gaming</span> */}
                 </div>

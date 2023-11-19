@@ -31,6 +31,23 @@ export function message() {
     return cc;
 }
 
+export function getAgedTimes(timestamp: number) {
+    const currentTimestamp = Math.floor(Date.now() / 1000); // Current UTC timestamp in seconds
+    const givenTimestamp = timestamp / 1000; // Given timestamp in seconds
+
+    const timeDifference = currentTimestamp - givenTimestamp;
+
+    if (timeDifference < 60) {
+        return `${Math.floor(timeDifference)} secs ago`;
+    } else if (timeDifference < 3600) {
+        return `${Math.floor(timeDifference / 60)} mins ago`;
+    } else if (timeDifference < 86400) {
+        return `${Math.floor(timeDifference / 3600)} hrs ago`;
+    } else {
+        return `${Math.floor(timeDifference / 86400)} days ago`;
+    }
+}
+
 
 export function getObjectArray(key) {
     const storedValue = localStorage.getItem(key);

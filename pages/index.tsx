@@ -43,7 +43,6 @@ export default function Home() {
   const [playLost, setPlayLost] = useState<boolean>(false)
   const { walletBalance } = useUserProvider()
   const { myWalletAddress, lucid } = useWalletConnect()
-  const isMobile = useMedia('(max-width: 768px)');
   const playAgain = () => {
     location.href = "/"
   }
@@ -316,11 +315,7 @@ export default function Home() {
                     walletBalance && walletBalance['ada'] && (parseInt(walletBalance['ada']) / 1000000).toFixed(0)
                   }
                 </div>
-                <p className='text-[#4B597C] leading-[24px] text-[16px] font-semibold'>
-                  SELECT TOKEN:
-                </p>
-                {/* SNEK:
-            NEBULA: */}
+                
               </div>
               <br />
 
@@ -344,7 +339,7 @@ export default function Home() {
                 }
               </select>
             </div>
-            <div className="h-full flex flex-col justify-center max-w-screen-lg mx-auto px-5 pb-5">
+            <div className="px-1 lg:h-full flex flex-col justify-center max-w-[1440px] w-full mx-auto px-5 pb-5">
               <div className="flex flex-col mt-10">
                 <div className="m-auto">
 
