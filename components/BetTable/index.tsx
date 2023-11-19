@@ -100,14 +100,10 @@ const BetTable = () => {
                     <thead>
                         <tr>
                             {TABLE_HEAD.map((head) => (
-                                <th key={head} className="text-[#c0c4d4] p-4">
-                                    <Typography
-                                        variant="small"
-                                        color="blue-gray"
-                                        className="font-normal leading-none opacity-70"
-                                    >
-                                        {head}
-                                    </Typography>
+                                <th key={head} className="text-[#c0c4d4] p-4 font-normal leading-none opacity-70">
+
+                                    {head}
+
                                 </th>
                             ))}
                         </tr>
@@ -124,36 +120,32 @@ const BetTable = () => {
                     }
                     {!isMobile && allRecords && allRecords.length > 0 && allRecords.map(({ created_at, addr, token, amount, result }, index) => (
                         <tr key={index} className="rounded-[12px] even:bg-[#202538]">
-                            <td className="p-4">
-                                <Typography variant="small" color="white" className="font-normal text-[#c0c4d4]">
-                                    {getAgedTimes(created_at)}
-                                </Typography>
+                            <td className="p-4 font-normal text-[#c0c4d4]">
+
+                                {getAgedTimes(created_at)}
+
                             </td>
-                            <td className="p-4">
-                                <Typography variant="small" color="white" className="font-normal">
-                                    {addr.slice(0, 10) + "..."}
-                                </Typography>
+                            <td className="p-4 font-normal text-white">
+
+                                {addr.slice(0, 10) + "..."}
+
                             </td>
-                            <td className="p-4">
-                                <Typography variant="small" color="white" className="font-normal uppercase">
-                                    {token}
-                                </Typography>
+                            <td className="p-4 font-normal text-white">
+                                {token}
+
                             </td>
-                            <td className="p-4">
-                                <Typography as="a" href="#" variant="small" color="white" className="font-medium">
-                                    {amount}
-                                </Typography>
+                            <td className="p-4 font-normal text-white">
+                                {amount}
+
                             </td>
-                            <td className="p-4">
+                            <td className="p-4 font-medium uppercase">
                                 {
                                     result ?
-                                        <Typography as="a" href="#" variant="small" className="font-medium text-[#7af996] uppercase">
-                                            + {amount * 2} ${token}
-                                        </Typography>
+                                        <p className='text-[#7af996]'>+ {amount * 2} ${token}</p>
+
                                         :
-                                        <Typography as="a" href="#" variant="small" className="font-medium text-[#f73737] uppercase">
-                                            - {amount} ${token}
-                                        </Typography>
+                                        <p className='text-[#f73737]'>- {amount} ${token}</p>
+
                                 }
 
                             </td>
@@ -163,24 +155,23 @@ const BetTable = () => {
                         <tr key={index} className="rounded-[12px] even:bg-[#202538]">
 
                             <td className="p-4">
-                                <Typography variant="small" color="white" className="font-normal">
-                                    {addr.slice(0, 10) + "..."}
-                                </Typography>
-                                <Typography variant="small" color="white" className="font-normal text-[#c0c4d4]">
-                                    {getAgedTimes(created_at)}
-                                </Typography>
+
+                                <p className='text-white font-normal'> {addr.slice(0, 10) + "..."}</p>
+
+                                <p className='font-normal text-[#c0c4d4] text-white'>{getAgedTimes(created_at)}</p>
+
+
+
                             </td>
 
-                            <td className="p-4">
+                            <td className="p-4 font-medium uppercase">
                                 {
                                     result ?
-                                        <Typography as="a" href="#" variant="small" className="font-medium text-[#7af996] uppercase">
-                                            + {amount * 2} ${token}
-                                        </Typography>
+                                        <p className='text-[#7af996]'>+ {amount * 2} ${token}</p>
+
                                         :
-                                        <Typography as="a" href="#" variant="small" className="font-medium text-[#f73737] uppercase">
-                                            - {amount} ${token}
-                                        </Typography>
+                                        <p className='text-[#f73737]'>- {amount} ${token}</p>
+
                                 }
 
                             </td>

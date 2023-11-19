@@ -1,21 +1,21 @@
-// ErrorBoundary.tsx
+// CustomErrorBoundary.tsx
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
-type ErrorBoundaryProps = {
+type CustomErrorBoundaryProps = {
   children: ReactNode;
 };
 
-type ErrorBoundaryState = {
+type CustomErrorBoundaryState = {
   hasError: boolean;
 };
 
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+class CustomErrorBoundary extends Component<CustomErrorBoundaryProps, CustomErrorBoundaryState> {
+  constructor(props: CustomErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(_: Error): CustomErrorBoundaryState {
     return { hasError: true };
   }
 
@@ -42,4 +42,4 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-export default ErrorBoundary;
+export default CustomErrorBoundary;

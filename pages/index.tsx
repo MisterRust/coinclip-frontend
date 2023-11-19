@@ -325,7 +325,7 @@ export default function Home() {
             </div>
           </>
         }
-        {
+        {/* {
           activeSection === 1 &&
           <>
             <SuccessSection
@@ -351,7 +351,7 @@ export default function Home() {
               loop={false}
             />
           </>
-        }
+        } */}
       </main>
 
 
