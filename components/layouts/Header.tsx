@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import Image from 'next/image'
 import React from 'react'
 import { CardanoWallet } from '@meshsdk/react'
-import { useWalletConnect } from "../../context/WalletConnect";
 import ConnectWalletButtons from "../ConnectWalletButtons";
 import { UserContext, UserProvider } from "../../context/UserProvider";
 import { useMedia } from "react-use";

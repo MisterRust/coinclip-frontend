@@ -5,7 +5,6 @@ import { DownArrow } from "./SvgIcons";
 
 import { GameContext } from "../context/GameProvider";
 import { UserContext } from "../context/UserProvider";
-import { useWalletConnect } from "../context/WalletConnect";
 const ConnectWalletButtons = () => {
     const [selectedWallet, setSelectedWallet] = useState(null);
 
@@ -18,7 +17,6 @@ const ConnectWalletButtons = () => {
     const { setAddress = () => { }, setUserWallet = () => { }, setWalletName = () => { } } = userContext || {};
 
     const [currentBalance, setCurrentBalance] = useState<number>();
-    const { walletBalance, myWalletAddress } = useWalletConnect()
     const walletLists = useWalletList();
     const address = useAddress();
 

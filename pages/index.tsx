@@ -20,7 +20,6 @@ import axios from 'axios'
 import ReactHowler from 'react-howler'
 import { getObjectArray, message, postFlips, setObjectArray } from './api/functions'
 import { useMedia } from 'react-use'
-import { useWalletConnect } from '../context/WalletConnect'
 import { useUserProvider } from '../context/UserProvider'
 import Link from 'next/link'
 import BetTable from '../components/BetTable';
@@ -42,7 +41,6 @@ export default function Home() {
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost, setPlayLost] = useState<boolean>(false)
   const { walletBalance } = useUserProvider()
-  const { myWalletAddress, lucid } = useWalletConnect()
   const playAgain = () => {
     location.href = "/"
   }
@@ -127,9 +125,9 @@ export default function Home() {
               amount: tokenAmount,
               win: true
             }
-            const retrievedArray: any[] = getObjectArray('record-' + myWalletAddress);
+            const retrievedArray: any[] = getObjectArray('record-' + walletAddr);
             retrievedArray.push(msg);
-            setObjectArray(('record-' + myWalletAddress), retrievedArray)
+            setObjectArray(('record-' + walletAddr), retrievedArray)
             setPlayWin(true)
           } else {
             setActiveSection(2)
@@ -139,7 +137,7 @@ export default function Home() {
               win: false
             }
             // setPlayLost(true)
-            const retrievedArray: any[] = getObjectArray('record-' + myWalletAddress);
+            const retrievedArray: any[] = getObjectArray('record-' + walletAddr);
             retrievedArray.push(msg);
             setObjectArray(('record-' + walletAddr), retrievedArray)
 
