@@ -19,32 +19,6 @@ const BetTable = () => {
     const walletAddr = useAddress();
     console.log("BetTable address", walletAddr)
 
-    const getAllFlipsData = useCallback(async () => {
-        const flipData = await getAllFlips();
-        setAllRecords(flipData)
-    }, [])
-
-    const getMyFlipsData = useCallback(async () => {
-        if (walletAddr !== undefined) {
-            const flipData = await getMyFlips(walletAddr)
-            setAllRecords(flipData)
-        }
-
-    }, [walletAddr])
-
-    const handleShowRecordChange = (record) => {
-        setShowRecord(record);
-    };
-
-    useEffect(() => {
-        if (showRecord === 0) {
-            getAllFlipsData();
-        }
-        if (showRecord === 1) {
-            getMyFlipsData()
-        }
-
-    }, [showRecord])
 
     useEffect(() => {
         if (width < breakpoint) {
@@ -53,6 +27,43 @@ const BetTable = () => {
             setIsMobile(false)
         }
     }, [width, breakpoint])
+
+    const getAllFlipsData = useCallback(async () => {
+        try {
+            const flipData = await getAllFlips();
+            setAllRecords(flipData);
+        } catch (error) {
+            console.error("Error fetching all flips:", error);
+        }
+    }, []);
+
+    const getMyFlipsData = useCallback(async () => {
+        try {
+            if (walletAddr !== undefined) {
+                const flipData = await getMyFlips(walletAddr);
+                setAllRecords(flipData);
+            }
+        } catch (error) {
+            console.error("Error fetching my flips:", error);
+        }
+    }, [walletAddr]);
+
+
+    const handleShowRecordChange = (record) => {
+        setShowRecord(record);
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            if (showRecord === 0) {
+                await getAllFlipsData();
+            } else if (showRecord === 1) {
+                await getMyFlipsData();
+            }
+        };
+
+        fetchData();
+    }, [showRecord, getAllFlipsData, getMyFlipsData]);
+
 
     return (
         <div className='mt-[40px]'>
