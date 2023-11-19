@@ -1,6 +1,9 @@
 .ada-option {
-    @apply text-white bg-[#008BF0] w-12 md:w-24 h-10 text-[12px] md:text-sm rounded-full border-4 border-[#008BF0];
+    @apply py-2 px-4 text-[12px] text-sm rounded-full bg-[#141928] text-white;
+    /* @media screen and (max-width: 650px) {
+        @apply text-white py-1 px-1 text-[8px];
+    } */
 }
 .ada-option.active {
-    @apply bg-white text-[#008BF0];
+    @apply bg-[#286eff] text-white;
 }

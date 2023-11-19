@@ -19,7 +19,8 @@ const TokenChoiceSection = ({
         }
     }
     return (
-        <div className="mt-5 inline-flex rounded-full m-auto bg-[#008BF0]">
+        <div className="sm:gap-1 p-1 md: gap-8 mt-5 inline-flex rounded-[12px] m-auto bg-[#202538] border-[2px] border border-[#2B303E] p-4 ">
+            {/* <div className='bg-[#141928] border border-[#2B303E] border-[2px] p-4 rounded-[12px] gap-2 flex'> */}
             {
                 tokenType && TOKEN_ARRAY[tokenType].choices.map((choice: number, index: number) => {
                     console.log("choice", choice)
@@ -34,6 +35,7 @@ const TokenChoiceSection = ({
                     )
                 })
             }
+            {/* </div> */}
         </div>
     )
 }

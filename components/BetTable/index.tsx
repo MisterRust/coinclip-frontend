@@ -57,14 +57,28 @@ const BetTable = () => {
                 {
                     !isMobile && <div className='font-semibold text-[24px] leading-[24px] text-white'> LIVE BET</div>
                 }
-                <div className='flex w-full md:block w-auto'>
-                    <button onClick={() => handleShowRecordChange(0)} className={showRecord === 0 ? styles['bet-record_active'] : styles['bet-record']}>
-                        LIVE BET
-                    </button>
-                    <button onClick={() => handleShowRecordChange(1)} className={showRecord === 1 ? styles['bet-record_active'] : styles['bet-record']}>
-                        My BET
-                    </button>
-                </div>
+                {
+                    !isMobile &&
+                    <div className='w-auto'>
+                        <button onClick={() => handleShowRecordChange(0)} className={showRecord === 0 ? styles['bet-record_active'] : styles['bet-record']}>
+                            LIVE BET
+                        </button>
+                        <button onClick={() => handleShowRecordChange(1)} className={showRecord === 1 ? styles['bet-record_active'] : styles['bet-record']}>
+                            My BET
+                        </button>
+                    </div>
+                }
+                {
+                    isMobile &&
+                    <div className='w-full'>
+                        <button onClick={() => handleShowRecordChange(0)} className={showRecord === 0 ? styles['bet-record_active'] : styles['bet-record']}>
+                            LIVE BET
+                        </button>
+                        <button onClick={() => handleShowRecordChange(1)} className={showRecord === 1 ? styles['bet-record_active'] : styles['bet-record']}>
+                            My BET
+                        </button>
+                    </div>
+                }
             </div>
             <table className="w-full min-w-max table-auto text-left mt-[32px]">
                 {

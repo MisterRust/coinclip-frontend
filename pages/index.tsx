@@ -369,7 +369,7 @@ export default function Home() {
                   }}
                   disabled={!tokenAmount || !betChoice}
                 >
-                  <p className="text-bold text-sm ">PLAY NOW</p>
+                  <p className="text-bold text-[16px] leading-[24px] ">PLAY NOW</p>
                 </button>
                 <BetTable />
               </div>

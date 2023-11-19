@@ -14,21 +14,23 @@ const BetChoiceSection = ({
 
     const choices: string[] = ["Heads", "Tails"]
     return (
-        <div className="mt-5 inline-flex rounded-full m-auto bg-[#0d0f18]">
-            {
-                choices.map((choice: string, index: number) => {
-                    return (
-                        <button
-                            key={index}
-                            type="button"
-                            className={`${styles['btn-choice']} ${betChoice === choice ? styles.active : ''}`}
-                            onClick={() => setBetChoice(choice)}
-                        >
-                            {choice}
-                        </button>
-                    )
-                })
-            }
+        <div className="mt-5 inline-flex rounded-full m-auto bg-[#202538] p-1 rounded-[6px]">
+            {/* <div className='bg-[#141928] rounded-[6px]'> */}
+                {
+                    choices.map((choice: string, index: number) => {
+                        return (
+                            <button
+                                key={index}
+                                type="button"
+                                className={`${styles['btn-choice']} ${betChoice === choice ? styles.active : ''}`}
+                                onClick={() => setBetChoice(choice)}
+                            >
+                                {choice}
+                            </button>
+                        )
+                    })
+                }
+            {/* </div> */}
         </div>
     )
 }
