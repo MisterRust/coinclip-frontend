@@ -281,6 +281,9 @@ export const ArrowButton = styled.div`
   border: 1px solid #286EFF;
   color: #286EFF;
   background: #171A26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
 `

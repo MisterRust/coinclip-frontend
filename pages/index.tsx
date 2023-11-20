@@ -4,6 +4,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from '../components/layouts/Header'
 import FailSection from '../components/sections/FailSection'
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { useEffect, useState } from 'react';
 import BetChoiceSection from '../components/sections/BetChoiceSection'
 import TokenChoiceSection from '../components/sections/TokenChoiceSection'
@@ -289,12 +290,14 @@ export default function Home() {
                 <SelectTokenText>SELECT TOKEN:</SelectTokenText>
                 <FlexBox alignItems='center' gap="87.5px" smGap='40px' className='mx-auto' smDirection='row'>
                   <ArrowButton onClick={minusNumber}>
-
+                    <BsChevronLeft />
                   </ArrowButton>
                   <a href={TWITTER_URL} target="_blank" className='flex justify-center mt-[20px]'>
                     <Image src={Object.values(TOKEN_ARRAY)[tokenNumber].image[betChoice]} width={200} height={200} alt='logo-icon' />
                   </a>
-                  <ArrowButton onClick={plusNumber}></ArrowButton>
+                  <ArrowButton onClick={plusNumber}>
+                    <BsChevronRight />
+                  </ArrowButton>
                 </FlexBox>
                 <CardanoTokenText>
                   Cardano ({TOKEN_ARRAY[tokenType].value})
