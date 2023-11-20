@@ -71,7 +71,7 @@ const TokenChoiceSection = ({
                     <Image src = {TOKEN_ARRAY[tokenType].mainImage} alt = "token-image" width = {24} height ={24} />
                     <p className='text-white text-[14px] leading-[24px]'>{tokenAmount && tokenAmount}</p>
                 </FlexBox>
-                <FlexBox width='auto' smDirection='row'>
+                <FlexBox width='auto' smDirection='row' gap="8px" smGap='4px'>
                     {
                         tokenType && TOKEN_ARRAY[tokenType].choices.map((choice: number, index: number) => {
                             console.log("choice", choice)
