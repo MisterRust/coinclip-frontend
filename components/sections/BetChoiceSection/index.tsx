@@ -51,23 +51,15 @@ const BetChoiceSection = ({
             {
                 choices.map((choice: string, index: number) => {
                     return (
-                        // <button
-                        //     key={index}
-                        //     type="button"
-                        //     className={`${styles['btn-choice']} ${betChoice === choice ? styles.active : ''}`}
-                        //     onClick={() => setBetChoice(choice)}
-                        // >
-                        //     {choice}
-                        // </button>
                         <BetChoiceButton key={index} active={betChoice === choice} onClick={() => setBetChoice(choice)}>
                          {
                             choice === "Heads" &&
-                            <TokenImage src={TOKEN_ARRAY[tokenType].image[choice]} alt = "token-image" />   
+                            <Image src={TOKEN_ARRAY[tokenType].image[choice]} alt = "token-image" width={24} height={24} />   
                          }
                          {choice}
                          {
                             choice === "Tails" &&
-                            <TokenImage src={TOKEN_ARRAY[tokenType].image[choice]} alt = "token-image" />   
+                            <Image src={TOKEN_ARRAY[tokenType].image[choice]} alt = "token-image" width={24} height={24}/>   
                          }
                         </BetChoiceButton>
                     )

@@ -292,7 +292,7 @@ export default function Home() {
 
                   </ArrowButton>
                   <a href={TWITTER_URL} target="_blank" className='flex justify-center mt-[20px]'>
-                    <Image src={Object.values(TOKEN_ARRAY)[tokenNumber].mainImage} width={200} height={200} alt='logo-icon' />
+                    <Image src={Object.values(TOKEN_ARRAY)[tokenNumber].image[betChoice]} width={200} height={200} alt='logo-icon' />
                   </a>
                   <ArrowButton onClick={plusNumber}></ArrowButton>
                 </FlexBox>
