@@ -5,6 +5,7 @@ import { TOKEN_ARRAY } from '../../../consts/tokens.consts';
 import { FlexBox } from '../../common/FlexBox';
 import CustomButton from '../../common/CustomButton';
 import styled from 'styled-components';
+import { infoAlert } from '../../alerts';
 
 interface TokenOptionStyle {
     active?: boolean;

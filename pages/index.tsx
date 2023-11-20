@@ -45,6 +45,7 @@ export default function Home() {
     location.href = "/"
   }
   const submit = async () => {
+    
     let walletName = localStorage.getItem("coinflip_walletname")
     if (walletName === "flint wallet")
       walletName = walletName.replace(" wallet", "");
@@ -52,6 +53,10 @@ export default function Home() {
 
     if (walletName === null) {
       infoAlert("Your wallet is not connected!!!")
+      return;
+    }
+    if(!tokenAmount){
+      infoAlert("Please select the bet amount!!!")
       return;
     }
 
@@ -335,7 +340,7 @@ export default function Home() {
             </div>
           </>
         }
-        {/* {
+        {
           activeSection === 1 &&
           <>
             <SuccessSection
@@ -361,7 +366,7 @@ export default function Home() {
               loop={false}
             />
           </>
-        } */}
+        }
       </main>
 
 
