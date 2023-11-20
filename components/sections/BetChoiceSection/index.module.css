@@ -1,7 +1,36 @@
 .btn-choice {
-    @apply text-white bg-[#0d0f18] w-[117px] h-12 text-[16px] font-semibold rounded-[12px] border-4 border-[#0d0f18];
+    display: flex;
+    padding: 12px 24px 12px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+
+    background-color: #0d0f18;
+    color: #5E657B;
+
+    font-family: Oxanium;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
 }
 
 .btn-choice.active {
-    @apply bg-[#2862ff] text-white;
+    color: #FFF;
+    background: #286EFF;
+    border: #397aff 2px solid;
+
+}
+.container{
+    display: flex;
+    padding: 24px;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+    align-self: stretch;
+    border-radius: 12px;
+    border: 1px solid #2B303E;
+    background: #202538;
+    margin: auto;
 }

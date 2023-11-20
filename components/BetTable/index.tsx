@@ -130,7 +130,7 @@ const BetTable = () => {
                                 {addr.slice(0, 10) + "..."}
 
                             </td>
-                            <td className="p-4 font-normal text-white">
+                            <td className="p-4 font-normal text-white uppercase">
                                 {token}
 
                             </td>

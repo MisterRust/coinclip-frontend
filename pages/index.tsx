@@ -21,6 +21,9 @@ import { useMedia } from 'react-use'
 import { useUserProvider } from '../context/UserProvider'
 import Link from 'next/link'
 import BetTable from '../components/BetTable';
+import { ArrowButton, CardanoTokenText, SelectTokenText } from '../styles/GlobalStyles'
+import { FlexBox } from '../components/common/FlexBox'
+import { BackgroundImage } from '../consts/image.consts'
 
 
 
@@ -28,6 +31,7 @@ import BetTable from '../components/BetTable';
 export default function Home() {
   const [activeSection, setActiveSection] = useState<number>(0)
   const [betChoice, setBetChoice] = useState<string>("Heads")
+  const [tokenNumber, setTokenNumber] = useState<number>(0)
   const [tokenType, setTokenType] = useState<string>("ada")
   const [tokenAmount, setTokenAmount] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -41,7 +45,7 @@ export default function Home() {
   }
   const submit = async () => {
     let walletName = localStorage.getItem("coinflip_walletname")
-    if(walletName === "flint wallet")
+    if (walletName === "flint wallet")
       walletName = walletName.replace(" wallet", "");
     console.log("walletName hey", walletName)
 
@@ -215,6 +219,26 @@ export default function Home() {
     setTokenType(event.target.value);
   };
 
+  const minusNumber = () => {
+    if (tokenNumber === 0) {
+      setTokenNumber(2);
+      setTokenType(Object.keys(TOKEN_ARRAY)[2])
+    } else {
+      setTokenNumber(tokenNumber - 1);
+      setTokenType(Object.keys(TOKEN_ARRAY)[tokenNumber - 1])
+    }
+  }
+
+  const plusNumber = () => {
+    if (tokenNumber === 2) {
+      setTokenNumber(0);
+      setTokenType(Object.keys(TOKEN_ARRAY)[0])
+    } else {
+      setTokenNumber(tokenNumber + 1);
+      setTokenType(Object.keys(TOKEN_ARRAY)[tokenNumber + 1])
+    }
+  }
+
 
   return (
     <div className={styles.container}>
@@ -256,62 +280,47 @@ export default function Home() {
         {
           activeSection === 0 &&
           <>
-            <div className='pt-[75px]'>
-              <div>
-                <div className='flex justify-center'>
-                  ADA: {
-                    // @ts-ignore
-                    walletBalance && walletBalance['ada'] && (parseInt(walletBalance['ada']) / 1000000).toFixed(0)
-                  }
-                </div>
-                
-              </div>
-              <br />
+            <div className="w-full mx-auto" style={{
+              backgroundImage: `url(${BackgroundImage})`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover'
+            }} >
+              <FlexBox direction='column' alignItems='center'>
+                <SelectTokenText>SELECT TOKEN:</SelectTokenText>
+                <FlexBox alignItems='center' gap="87.5px" smGap='40px' className='mx-auto' smDirection='row'>
+                  <ArrowButton onClick={minusNumber}>
 
-              <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={tokenType} onChange={handleTokenType}
-              >
-                <option selected>Choose a token</option>
-                {
-                  Object.keys(TOKEN_ARRAY).map((item, index) => {
-                    return (
-                      <option
-                        value={item} key={index}
-
-                      >
-                        {
-                          TOKEN_ARRAY[item].value
-                        }
-                      </option>
-                    )
-                  })
-                }
-              </select>
-            </div>
-            <div className="px-1 lg:h-full flex flex-col justify-center max-w-[1440px] w-full mx-auto px-5 pb-5">
-              <div className="flex flex-col mt-10">
-                <div className="m-auto">
-
+                  </ArrowButton>
                   <a href={TWITTER_URL} target="_blank" className='flex justify-center mt-[20px]'>
-                    <Image src={TOKEN_ARRAY[tokenType].image[betChoice]} width={200} height={200} alt='logo-icon' />
+                    <Image src={Object.values(TOKEN_ARRAY)[tokenNumber].mainImage} width={200} height={200} alt='logo-icon' />
                   </a>
-                  <p className="text-white text-4xl font-bold text-center mt-[20px]">
-                    Cardano ({TOKEN_ARRAY[tokenType].value})
-                  </p>
-                </div>
+                  <ArrowButton onClick={plusNumber}></ArrowButton>
+                </FlexBox>
+                <CardanoTokenText>
+                  Cardano ({TOKEN_ARRAY[tokenType].value})
+                </CardanoTokenText>
                 <BetChoiceSection
                   betChoice={betChoice}
                   setBetChoice={setBetChoice}
+                  tokenType={tokenType}
                 />
+              </FlexBox>
+            </div>
+            <div className='max-w-[1440px] w-full '>
+              <div className="flex flex-col">
+
                 {
                   tokenType &&
                   <TokenChoiceSection
                     tokenAmount={tokenAmount}
                     setTokenAmount={setTokenAmount}
                     tokenType={tokenType}
+                    play={() => {
+                      submit()
+                    }}
                   />
                 }
-                <button
+                {/* <button
                   className={styles['btn-submit']}
                   onClick={() => {
                     submit()
@@ -319,7 +328,7 @@ export default function Home() {
                   disabled={!tokenAmount || !betChoice}
                 >
                   <p className="text-bold text-[16px] leading-[24px] ">PLAY NOW</p>
-                </button>
+                </button> */}
                 <BetTable />
               </div>
             </div>

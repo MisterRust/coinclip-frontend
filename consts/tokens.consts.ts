@@ -10,6 +10,7 @@ export const TOKEN_ARRAY = {
             5, 10, 25, 50, 75, 100
             // 1, 2, 3, 4, 5
         ],
+        mainImage: CARDANO_IMG,
         image: {
             "Heads": CARDANO_IMG,
             "Tails": CARDANO_BACK_IMG,
@@ -34,6 +35,7 @@ export const TOKEN_ARRAY = {
             5000, 10000, 25000, 50000, 100000, 250000
             // 100, 200, 300, 400, 500
         ],
+        mainImage: NEBULA_IMG,
         image: {
             "Heads": NEBULA_IMG,
             "Tails": NEBULA_BACK_IMG,
@@ -59,6 +61,7 @@ export const TOKEN_ARRAY = {
             10000, 40000, 50000, 100000
             // 1000, 2000, 5000, 10000
         ],
+        mainImage: SNEK_IMG,
         image: {
             "Heads": SNEK_IMG,
             "Tails": SNEK_BACK_IMG,

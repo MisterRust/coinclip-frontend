@@ -6,3 +6,5 @@ export const NEBULA_BACK_IMG = "/tokens/nebula_back.png"
 export const SNEK_BACK_IMG = "/tokens/snek_back.png"
 export const CARDANO_BACK_IMG = "/tokens/cardano_back.png"
 export const HYENA_BACK_IMG = "/tokens/hyena_back.png"
+
+export const BackgroundImage = "/background.png"
