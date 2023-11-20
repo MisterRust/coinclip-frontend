@@ -248,8 +248,8 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Cardano CoinFlip Game</title>
-        <meta name="description" content="Flip a coin through space time" />
+        <title>Cardano Coin Flip by Nebula</title>
+        <meta name="description" content="Cardano Coin Flip by Nebula" />
         <link rel="icon" href="/logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
