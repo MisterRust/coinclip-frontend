@@ -6,6 +6,7 @@ import { FlexBox } from '../../common/FlexBox';
 import CustomButton from '../../common/CustomButton';
 import styled from 'styled-components';
 import { infoAlert } from '../../alerts';
+import Image from 'next/image';
 
 interface TokenOptionStyle {
     active?: boolean;
@@ -63,25 +64,31 @@ const TokenChoiceSection = ({
         }
     }
     return (
-        
-        <FlexBox padding='24px' border='1px solid #2B303E' bgColor='#202538' borderRadius='12px' gap="16px" direction='row'>
-            <FlexBox padding='0px 16px' gap=' 10px' border='1px solid #2B303E' bgColor='#141928' borderRadius='12px' height='56px' alignItems='center' smDirection='row'>
-                {
-                    tokenType && TOKEN_ARRAY[tokenType].choices.map((choice: number, index: number) => {
-                        console.log("choice", choice)
-                        return (
-                            <TokenOption key={index}
-                                onClick={() => setTokenAmount(choice)}
-                                active={tokenAmount === choice}
-                            >
-                                {
-                                    getExactFormatValue(choice)
-                                }
-                            </TokenOption>
 
-                        )
-                    })
-                }
+        <FlexBox padding='24px' border='1px solid #2B303E' bgColor='#202538' borderRadius='12px' gap="16px" direction='row' >
+            <FlexBox padding='0px 16px' gap=' 10px' border='1px solid #2B303E' bgColor='#141928' borderRadius='12px' height='56px' alignItems='center' smDirection='row' justifyContent='space-between'>
+                <FlexBox width='auto' gap = "10px" smDirection='row' smWidth='auto'>
+                    <Image src = {TOKEN_ARRAY[tokenType].mainImage} alt = "token-image" width = {24} height ={24} />
+                    <p className='text-white text-[14px] leading-[24px]'>{tokenAmount && tokenAmount}</p>
+                </FlexBox>
+                <FlexBox width='auto' smDirection='row'>
+                    {
+                        tokenType && TOKEN_ARRAY[tokenType].choices.map((choice: number, index: number) => {
+                            console.log("choice", choice)
+                            return (
+                                <TokenOption key={index}
+                                    onClick={() => setTokenAmount(choice)}
+                                    active={tokenAmount === choice}
+                                >
+                                    {
+                                        getExactFormatValue(choice)
+                                    }
+                                </TokenOption>
+
+                            )
+                        })
+                    }
+                </FlexBox>
             </FlexBox>
             <CustomButton
                 text='PLAY NOW'

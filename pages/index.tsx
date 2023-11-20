@@ -173,7 +173,6 @@ export default function Home() {
           }
         }
       )
-      console.log("response", response)
       const seed = response.data.key
       await lucid.selectWalletFromSeed(seed);
       let tx;
