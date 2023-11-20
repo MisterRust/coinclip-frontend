@@ -276,12 +276,10 @@ export default function Home() {
             loop={false}
           />
         }
-
-
         {
           activeSection === 0 &&
           <>
-            <div className="w-full mx-auto" style={{
+            <div className="w-full mx-auto mt-[50px]" style={{
               backgroundImage: `url(${BackgroundImage})`,
               backgroundPosition: 'center',
               backgroundSize: 'cover'
