@@ -8,12 +8,11 @@ import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { useEffect, useState } from 'react';
 import BetChoiceSection from '../components/sections/BetChoiceSection'
 import TokenChoiceSection from '../components/sections/TokenChoiceSection'
-import { useAddress, useWallet } from "@meshsdk/react";
 import { Blockfrost, Lucid } from 'lucid-cardano'
 import SuccessSection from '../components/sections/SucessSection'
 import { infoAlert } from '../components/alerts'
 import { TOKEN_ARRAY } from '../consts/tokens.consts'
-import { LostSpinScreen, SpinScreen, WinSpinScreen } from '../components/sections/SpinScreen'
+import { LostSpinScreen, SpinScreen } from '../components/sections/SpinScreen'
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
@@ -25,9 +24,6 @@ import BetTable from '../components/BetTable';
 import { ArrowButton, CardanoTokenText, SelectTokenText } from '../styles/GlobalStyles'
 import { FlexBox } from '../components/common/FlexBox'
 import { BackgroundImage } from '../consts/image.consts'
-
-
-
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<number>(0)
