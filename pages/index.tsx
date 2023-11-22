@@ -45,7 +45,7 @@ export default function Home() {
     location.href = "/"
   }
   const submit = async () => {
-    
+
     let walletName = localStorage.getItem("coinflip_walletname")
     if (walletName === "flint wallet")
       walletName = walletName.replace(" wallet", "");
@@ -55,7 +55,7 @@ export default function Home() {
       infoAlert("Your wallet is not connected!!!")
       return;
     }
-    if(!tokenAmount){
+    if (!tokenAmount) {
       infoAlert("Please select the bet amount!!!")
       return;
     }
@@ -69,9 +69,11 @@ export default function Home() {
     );
     const receiver: string = "addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7"
     const _token_amount = tokenAmount * Math.pow(10, TOKEN_ARRAY[tokenType].decimals);
+    console.log("_token_amount", _token_amount)
 
     const policy = TOKEN_ARRAY[tokenType].policyId
     const asset = TOKEN_ARRAY[tokenType].asset
+    console.log("policy, asset", policy, asset)
 
     let api = undefined
     // @ts-ignore
@@ -96,16 +98,16 @@ export default function Home() {
           // @ts-ignore
           .payToAddress(receiver, { "lovelace": 1000000n })
           // @ts-ignore
-          .payToAddress(receiver, { "lovelace": _token_amount })
+          .payToAddress(receiver, { "lovelace": BigInt(_token_amount) })
           .complete();
 
       } else {
 
         tx = await lucid.newTx()
           // @ts-ignore
-          .payToAddress(receiver, { "lovelace": 1000000n })
+          .payToAddress(receiver, { "lovelace": 2000000n })
           // @ts-ignore
-          .payToAddress(receiver, { [policy + asset]: _token_amount })
+          .payToAddress(receiver, { [policy + asset]: BigInt(_token_amount) })
           .complete();
       }
       const signedTx = await tx.sign().complete();
@@ -184,7 +186,7 @@ export default function Home() {
       } else {
         tx = await lucid.newTx()
           // @ts-ignore
-          .payToAddress(walletAddr, { [policy + asset]: _token_amount * 2 })
+          .payToAddress(walletAddr, { [policy + asset]: BigInt(_token_amount * 2) })
           .complete();
       }
       const signedTx = await tx.sign().complete();
