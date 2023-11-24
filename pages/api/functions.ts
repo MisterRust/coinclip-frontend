@@ -61,7 +61,27 @@ export function setObjectArray(key, value) {
 export const postFlips = async (reqData: any) => {
     console.log("calling postFlips", reqData)
     try {
-        const response = await axios.post("https://nebula-coinflip-backend.up.railway.app/flips",
+        const response = await axios.post("https://nebula-coinflip-backend.vercel.app/flips",
+            JSON.stringify(reqData),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        // Handle the response as needed
+        console.log(response.data);
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+    }
+}
+
+export const withdraw = async (reqData: any) => {
+    console.log("withdraw reqData", reqData)
+    try {
+        const response = await axios.post("https://nebula-coinflip-backend.vercel.app/tx/withdraw",
             JSON.stringify(reqData),
             {
                 headers: {

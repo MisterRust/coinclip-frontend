@@ -16,7 +16,7 @@ import { LostSpinScreen, SpinScreen } from '../components/sections/SpinScreen'
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
-import { getObjectArray, message, postFlips, setObjectArray } from './api/functions'
+import { getObjectArray, message, postFlips, setObjectArray, withdraw } from './api/functions'
 import { useMedia } from 'react-use'
 import { useUserProvider } from '../context/UserProvider'
 import Link from 'next/link'
@@ -24,6 +24,8 @@ import BetTable from '../components/BetTable';
 import { ArrowButton, CardanoTokenText, SelectTokenText } from '../styles/GlobalStyles'
 import { FlexBox } from '../components/common/FlexBox'
 import { BackgroundImage } from '../consts/image.consts'
+import { AppWallet, BlockfrostProvider, Transaction } from '@meshsdk/core'
+import { useAddress, useWallet } from '@meshsdk/react'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<number>(0)
@@ -36,7 +38,8 @@ export default function Home() {
 
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost] = useState<boolean>(false)
-  const { walletBalance } = useUserProvider()
+  const { wallet, connected } = useWallet();
+  const address = useAddress();
   const playAgain = () => {
     location.href = "/"
   }
@@ -88,28 +91,77 @@ export default function Home() {
 
     try {
       let tx;
-
+      let txHash;
       if (tokenType === "ada") {
-        tx = await lucid.newTx()
-          // @ts-ignore
-          .payToAddress(receiver, { "lovelace": 1000000n })
-          // @ts-ignore
-          .payToAddress(receiver, { "lovelace": BigInt(_token_amount) })
-          .complete();
-
-      } else {
-
-        tx = await lucid.newTx()
-          // @ts-ignore
-          .payToAddress(receiver, { "lovelace": 2000000n })
-          // @ts-ignore
-          .payToAddress(receiver, { [policy + asset]: BigInt(_token_amount) })
-          .complete();
+        tx = new Transaction({ initiator: wallet })
+          .sendLovelace(
+            receiver,
+            '1000000'
+          )
+          .sendLovelace(
+            receiver,
+            _token_amount.toString()
+          );
       }
-      const signedTx = await tx.sign().complete();
+      if (tokenType === 'snek') {
+        tx = new Transaction({ initiator: wallet })
+          .sendLovelace(
+            receiver,
+            '1000000'
+          )
+          .sendAssets(
+            receiver,
+            [
+              {
+                unit: '279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b',
+                quantity: _token_amount.toString(),
+              },
+            ]
+          );
+      }
+      if (tokenType === "nebula") {
+        tx = new Transaction({ initiator: wallet })
+          .sendLovelace(
+            receiver,
+            '1000000'
+          )
+          .sendAssets(
+            receiver,
+            [
+              {
+                unit: '3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41',
+                quantity: _token_amount.toString(),
+              },
+            ]
+          );
+      }
 
-      const txHash = await signedTx.submit();
-      // const txHash = true;
+      const unsignedTx = await tx.build();
+      const signedTx = await wallet.signTx(unsignedTx);
+      txHash = await wallet.submitTx(signedTx);
+      // let tx;
+      // if (tokenType === "ada") {
+      //   tx = await lucid.newTx()
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { "lovelace": 1000000n })
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { "lovelace": BigInt(_token_amount) })
+      //     .complete();
+      // } else {
+
+      //   tx = await lucid.newTx()
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { "lovelace": 1000000n })
+      //     // @ts-ignore
+      //     .payToAddress(receiver, { [policy + asset]: BigInt(_token_amount) })
+      //     .complete();
+      // }
+
+
+      // const signedTx = await tx.sign().complete();
+
+      // const txHash = await signedTx.submit();
+
       if (txHash) {
         const result = isSuccess()
         console.log("result", result)
@@ -155,50 +207,19 @@ export default function Home() {
 
   const withDraw = async (result: string, walletAddr: string, _token_amount: number) => {
     if (result === "win") {
-      // if success
       setActiveSection(1)
-      const lucid = await Lucid.new(
-        new Blockfrost(
-          "https://cardano-mainnet.blockfrost.io/api/v0",
-          'mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH'
-        ),
-        "Mainnet"
-      );
-      const response = await axios.get("https://nebula-coinflip-backend.up.railway.app/api",
-        {
-          headers: {
-            'X-Api-Key': message()
-          }
-        }
-      )
-      const seed = response.data.key
-      await lucid.selectWalletFromSeed(seed);
-      let tx;
-      if (tokenType === "ada") {
-        tx = await lucid.newTx()
-          .payToAddress(walletAddr, { lovelace: BigInt(_token_amount * 2) })
-          .complete();
-
-      } else {
-        tx = await lucid.newTx()
-          // @ts-ignore
-          .payToAddress(walletAddr, { [policy + asset]: BigInt(_token_amount * 2) })
-          .complete();
-      }
-      const signedTx = await tx.sign().complete();
-
-      const txHash = await signedTx.submit();
-      if (txHash) {
-        await postFlips({
-          addr: walletAddr,
-          token: tokenType,
-          result: true,
-          amount: tokenAmount,
-          created_at: new Date().getTime()
-        })
-      }
-      console.log("txhash", txHash)
-
+      await postFlips({
+        addr: walletAddr,
+        token: tokenType,
+        result: true,
+        amount: tokenAmount,
+        created_at: new Date().getTime()
+      })
+      await withdraw({
+        address: walletAddr,
+        tokenType: tokenType,
+        amount: tokenAmount
+      })
     } else {
       await postFlips({
         addr: walletAddr,
@@ -215,7 +236,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 0.7 ? "win" : "fail";
+    return num > 0.1 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
@@ -241,6 +262,16 @@ export default function Home() {
       setTokenType(Object.keys(TOKEN_ARRAY)[tokenNumber + 1])
     }
   }
+
+
+
+  useEffect(() => {
+
+    if (Object.values(wallet).length !== 0) {
+
+    }
+
+  }, [wallet])
 
 
   return (
@@ -313,7 +344,7 @@ export default function Home() {
               <div className="flex flex-col">
 
                 {
-                  tokenType &&
+                  tokenType && Object.values(wallet).length !== 0 &&
                   <TokenChoiceSection
                     tokenAmount={tokenAmount}
                     setTokenAmount={setTokenAmount}
