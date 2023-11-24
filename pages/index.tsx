@@ -32,7 +32,7 @@ export default function Home() {
   const [betChoice, setBetChoice] = useState<string>("Heads")
   const [tokenNumber, setTokenNumber] = useState<number>(0)
   const [tokenType, setTokenType] = useState<string>("ada")
-  const [tokenAmount, setTokenAmount] = useState<number>()
+  const [tokenAmount, setTokenAmount] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
   const [isWin, setIsWin] = useState<string>();
 
@@ -40,6 +40,11 @@ export default function Home() {
   const [playLost] = useState<boolean>(false)
   const { wallet, connected } = useWallet();
   const address = useAddress();
+
+  useEffect(() => {
+    setTokenAmount(0);
+  }, [tokenType])
+
   const playAgain = () => {
     location.href = "/"
   }
@@ -54,7 +59,7 @@ export default function Home() {
       infoAlert("Your wallet is not connected!!!")
       return;
     }
-    if (!tokenAmount) {
+    if (tokenAmount === 0) {
       infoAlert("Please select the bet amount!!!")
       return;
     }
