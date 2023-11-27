@@ -213,18 +213,23 @@ export default function Home() {
   const withDraw = async (result: string, walletAddr: string, _token_amount: number) => {
     if (result === "win") {
       setActiveSection(1)
-      await postFlips({
-        addr: walletAddr,
-        token: tokenType,
-        result: true,
-        amount: tokenAmount,
-        created_at: new Date().getTime()
-      })
-      await withdraw({
+      
+      const res = await withdraw({
         address: walletAddr,
         tokenType: tokenType,
         amount: tokenAmount
-      })
+      });
+      console.log("Res", res)
+
+      if(res && res.success){
+        await postFlips({
+          addr: walletAddr,
+          token: tokenType,
+          result: true,
+          amount: tokenAmount,
+          created_at: new Date().getTime()
+        })
+      }
     } else {
       await postFlips({
         addr: walletAddr,
@@ -241,7 +246,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.3 ? "win" : "fail";
+    return num > 0.01 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {

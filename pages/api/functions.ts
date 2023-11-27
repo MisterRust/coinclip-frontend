@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BASE_URL } from "../../consts/url.consts";
 
 export function message() {
 
@@ -61,7 +62,7 @@ export function setObjectArray(key, value) {
 export const postFlips = async (reqData: any) => {
     console.log("calling postFlips", reqData)
     try {
-        const response = await axios.post("https://nebula-coinflip-backend.vercel.app/flips",
+        const response = await axios.post(`${BASE_URL}flips`,
             JSON.stringify(reqData),
             {
                 headers: {
@@ -81,7 +82,7 @@ export const postFlips = async (reqData: any) => {
 export const withdraw = async (reqData: any) => {
     console.log("withdraw reqData", reqData)
     try {
-        const response = await axios.post("https://nebula-coinflip-backend.vercel.app/tx/withdraw",
+        const response = await axios.post(`${BASE_URL}tx/withdraw`,
             JSON.stringify(reqData),
             {
                 headers: {
@@ -89,9 +90,10 @@ export const withdraw = async (reqData: any) => {
                 },
             }
         );
+        console.log("response.data", response.data)
 
         // Handle the response as needed
-        console.log(response.data);
+        return response.data;
     } catch (error) {
         // Handle errors
         console.error(error);
@@ -101,7 +103,7 @@ export const withdraw = async (reqData: any) => {
 export const getAllFlips = async () => {
     console.log("calling getFlips")
     try {
-        const response = await axios.get("https://nebula-coinflip-backend.up.railway.app/flips");
+        const response = await axios.get(`${BASE_URL}flips`);
         console.log("getFlips response", response.data)
         return response.data.reverse()
     } catch (error) {
@@ -113,7 +115,7 @@ export const getAllFlips = async () => {
 export const getMyFlips = async (addr: string) => {
     console.log("calling getFlips")
     try {
-        const response = await axios.get("https://nebula-coinflip-backend.up.railway.app/flips/" + addr);
+        const response = await axios.get(`${BASE_URL}flips`);
         console.log("getFlips response", response.data)
         return response.data.reverse()
     } catch (error) {
