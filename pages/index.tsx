@@ -221,15 +221,6 @@ export default function Home() {
       });
       console.log("Res", res)
 
-      if(res && res.success){
-        await postFlips({
-          addr: walletAddr,
-          token: tokenType,
-          result: true,
-          amount: tokenAmount,
-          created_at: new Date().getTime()
-        })
-      }
     } else {
       await postFlips({
         addr: walletAddr,
