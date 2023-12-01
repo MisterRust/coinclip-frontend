@@ -34,7 +34,7 @@ export const TOKEN_ARRAY = {
         policyAsset: "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41",
         decimals: 8,
         choices: [
-            5000, 10000, 25000, 50000, 100000, 250000
+            5000, 10000, 25000, 50000, 100000
             // 1, 2, 3, 4, 5
         ],
         mainImage: NEBULA_IMG,
