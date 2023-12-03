@@ -42,7 +42,7 @@ const BetTable = () => {
         try {
             if (walletAddr !== undefined) {
                 const flipData = await getMyFlips(walletAddr);
-                setMyRecords(flipData);
+                setAllRecords(flipData);
             }
         } catch (error) {
             console.error("Error fetching my flips:", error);
