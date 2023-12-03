@@ -115,7 +115,7 @@ export const getAllFlips = async () => {
 export const getMyFlips = async (addr: string) => {
     console.log("calling getFlips")
     try {
-        const response = await axios.get(`${BASE_URL}flips`);
+        const response = await axios.get(`${BASE_URL}flips/${addr}`);
         console.log("getFlips response", response.data)
         return response.data.reverse()
     } catch (error) {

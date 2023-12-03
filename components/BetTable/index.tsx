@@ -12,6 +12,7 @@ const TABLE_HEAD = ["Time", "Address", "Token", "Amount", "Result"];
 const BetTable = () => {
     const [showRecord, setShowRecord] = useState<number>(0);
     const [allRecords, setAllRecords] = useState<Record[]>()
+    const [myRecords, setMyRecords] = useState<Record[]>()
     const [isMobile, setIsMobile] = useState<boolean>(false);
 
     const { height, width } = useWindowDimensions()
@@ -41,7 +42,7 @@ const BetTable = () => {
         try {
             if (walletAddr !== undefined) {
                 const flipData = await getMyFlips(walletAddr);
-                setAllRecords(flipData);
+                setMyRecords(flipData);
             }
         } catch (error) {
             console.error("Error fetching my flips:", error);
