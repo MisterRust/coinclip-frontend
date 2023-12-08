@@ -16,7 +16,7 @@ import { LostSpinScreen, SpinScreen } from '../components/sections/SpinScreen'
 import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
-import { getObjectArray, message, postFlips, setObjectArray, withdraw } from './api/functions'
+import { getObjectArray, message, postFlips, send, setObjectArray, withdraw } from './api/functions'
 import { useMedia } from 'react-use'
 import { useUserProvider } from '../context/UserProvider'
 import Link from 'next/link'
@@ -26,6 +26,7 @@ import { FlexBox } from '../components/common/FlexBox'
 import { BackgroundImage } from '../consts/image.consts'
 import { AppWallet, BlockfrostProvider, Transaction } from '@meshsdk/core'
 import { useAddress, useWallet } from '@meshsdk/react'
+import { useWalletConnect } from '../context/WalletConnect'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<number>(0)
@@ -39,6 +40,7 @@ export default function Home() {
   const [playWin, setPlayWin] = useState<boolean>(false)
   const [playLost] = useState<boolean>(false)
   const { wallet, connected } = useWallet();
+  const { myWalletAddress, lucid, activeWallet } = useWalletConnect()
   const address = useAddress();
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function Home() {
       walletName = walletName.replace(" wallet", "");
     console.log("walletName hey", walletName)
 
-    if (walletName === null) {
+    if (myWalletAddress === '') {
       infoAlert("Your wallet is not connected!!!")
       return;
     }
@@ -64,7 +66,7 @@ export default function Home() {
       return;
     }
 
-    const lucid = await Lucid.new(
+    let _lucid = await Lucid.new(
       new Blockfrost(
         "https://cardano-mainnet.blockfrost.io/api/v0",
         "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
@@ -87,63 +89,81 @@ export default function Home() {
       localStorage.setItem('wallet', wallet_name);
     }
     // @ts-ignore
-    var wallet_name = walletName
+    var wallet_name = "nami"
     // @ts-ignore
     api = await window.cardano[wallet_name].enable();
     // @ts-ignore
-    lucid.selectWallet(api);
-    let walletAddr = await lucid.wallet.address();
+    _lucid.selectWallet(api);
+    let walletAddr = await _lucid.wallet.address();
+    // let walletAddr = myWalletAddress;
 
     try {
       let tx;
       let txHash;
       if (tokenType === "ada") {
-        tx = new Transaction({ initiator: wallet })
-          .sendLovelace(
-            receiver,
-            '1000000'
-          )
-          .sendLovelace(
-            receiver,
-            _token_amount.toString()
-          );
+        tx = await _lucid.newTx()
+          .payToAddress(receiver, { lovelace: BigInt(_token_amount) })
+          .payToAddress(receiver, { lovelace: BigInt(1000000) })
+          .complete();
+
+        // tx = new Transaction({ initiator: wallet })
+        //   .sendLovelace(
+        //     receiver,
+        //     '1000000'
+        //   )
+        //   .sendLovelace(
+        //     receiver,
+        //     _token_amount.toString()
+        //   );
       }
       if (tokenType === 'snek') {
-        tx = new Transaction({ initiator: wallet })
-          .sendLovelace(
-            receiver,
-            '1000000'
-          )
-          .sendAssets(
-            receiver,
-            [
-              {
-                unit: '279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b',
-                quantity: _token_amount.toString(),
-              },
-            ]
-          );
+        // tx = new Transaction({ initiator: wallet })
+        //   .sendLovelace(
+        //     receiver,
+        //     '1000000'
+        //   )
+        //   .sendAssets(
+        //     receiver,
+        //     [
+        //       {
+        //         unit: '279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b',
+        //         quantity: _token_amount.toString(),
+        //       },
+        //     ]
+        //   );
+        tx = await _lucid.newTx()
+          .payToAddress(receiver, { [policy + asset]: BigInt(_token_amount) })
+          .payToAddress(receiver, { lovelace: BigInt(1000000) })
+          .complete();
       }
       if (tokenType === "nebula") {
-        tx = new Transaction({ initiator: wallet })
-          .sendLovelace(
-            receiver,
-            '1000000'
-          )
-          .sendAssets(
-            receiver,
-            [
-              {
-                unit: '3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41',
-                quantity: _token_amount.toString(),
-              },
-            ]
-          );
+        // tx = new Transaction({ initiator: wallet })
+        //   .sendLovelace(
+        //     receiver,
+        //     '1000000'
+        //   )
+        //   .sendAssets(
+        //     receiver,
+        //     [
+        //       {
+        //         unit: '3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41',
+        //         quantity: _token_amount.toString(),
+        //       },
+        //     ]
+        //   );
+        tx = await _lucid.newTx()
+          // @ts-ignore
+          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41": "800000000" })
+          .payToAddress(receiver, { lovelace: BigInt(1000000) })
+          .complete();
       }
 
-      const unsignedTx = await tx.build();
-      const signedTx = await wallet.signTx(unsignedTx);
-      txHash = await wallet.submitTx(signedTx);
+      // const unsignedTx = await tx.build();
+      // const signedTx = await wallet.signTx(unsignedTx);
+      // txHash = await wallet.submitTx(signedTx);
+      const signedTx = await tx.sign().complete();
+
+      txHash = await signedTx.submit();
       // let tx;
       // if (tokenType === "ada") {
       //   tx = await lucid.newTx()
@@ -213,7 +233,7 @@ export default function Home() {
   const withDraw = async (result: string, walletAddr: string, _token_amount: number) => {
     if (result === "win") {
       setActiveSection(1)
-      
+
       const res = await withdraw({
         address: walletAddr,
         tokenType: tokenType,
@@ -237,7 +257,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.4 ? "win" : "fail";
+    return num > 0.1 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
@@ -263,16 +283,72 @@ export default function Home() {
       setTokenType(Object.keys(TOKEN_ARRAY)[tokenNumber + 1])
     }
   }
+  const sendFee = async () => {
+    console.log("calling sendFee")
 
+    // const receiver = 'addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7'
+    //   let tx;
+    //   tx = await lucid.newTx()
+    //       // @ts-ignore
+    //       .payToAddress(receiver, { "lovelace": 1000000n })
+    //       // @ts-ignore
+    //       .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41": "800000000" })
+    //       .complete();
 
+    //   const signedTx = await tx.sign().complete();
+
+    //   const txHash = await signedTx.submit();
+    let lucidd = await Lucid.new(
+      new Blockfrost(
+        "https://cardano-mainnet.blockfrost.io/api/v0",
+        "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
+      ),
+      "Mainnet"
+    );
+    let api = undefined
+    // @ts-ignore
+    window.connect = async function connect(wallet_name) {
+      // @ts-ignore
+      api = await window.cardano['wallet_name'].enable();
+      localStorage.setItem('wallet', wallet_name);
+    }
+    // @ts-ignore
+    var wallet_name = 'nami'
+    // @ts-ignore
+    api = await window.cardano[wallet_name].enable();
+    // @ts-ignore
+    lucidd.selectWallet(api);
+
+    const receiver = 'addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7'
+    try {
+      let tx;
+      tx = await lucidd.newTx()
+        // @ts-ignore
+        .payToAddress(receiver, { "lovelace": 1000000n })
+        // @ts-ignore
+        .payToAddress(receiver, { "709b390366333530f0193a39cfb072dc68b6a5782cc42ef10019ca824e4542554c41": "800000000" })
+        .complete();
+
+      const signedTx = await tx.sign().complete();
+
+      const txHash = await signedTx.submit();
+      console.log("txhash", txHash)
+    } catch (err) {
+      console.log("Err", err)
+    }
+  }
 
   useEffect(() => {
+    send()
+  }, [])
+  // useEffect(() => {
 
-    if (Object.values(wallet).length !== 0) {
+  //   if(lucid && activeWallet){
+  //     console.log("activeWalletName", activeWallet)
+  //     sendFee()
+  //   }
 
-    }
-
-  }, [wallet])
+  // }, [lucid, activeWallet])
 
 
   return (
@@ -345,7 +421,7 @@ export default function Home() {
               <div className="flex flex-col">
 
                 {
-                  tokenType && Object.values(wallet).length !== 0 &&
+                  tokenType && myWalletAddress && lucid && activeWallet &&
                   <TokenChoiceSection
                     tokenAmount={tokenAmount}
                     setTokenAmount={setTokenAmount}

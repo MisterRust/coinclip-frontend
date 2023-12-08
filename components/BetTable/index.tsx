@@ -7,6 +7,7 @@ import { getAgedTimes, getAllFlips, getMyFlips } from '../../pages/api/functions
 import { useAddress } from '@meshsdk/react';
 import { useMedia } from 'react-use';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions';
+import { useWalletConnect } from '../../context/WalletConnect';
 const TABLE_HEAD = ["Time", "Address", "Token", "Amount", "Result"];
 
 const BetTable = () => {
@@ -15,10 +16,12 @@ const BetTable = () => {
     const [myRecords, setMyRecords] = useState<Record[]>()
     const [isMobile, setIsMobile] = useState<boolean>(false);
 
+    const { myWalletAddress } = useWalletConnect()
+
     const { height, width } = useWindowDimensions()
     const breakpoint = 768
-    const walletAddr = useAddress();
-    console.log("BetTable address", walletAddr)
+    // const walletAddr = useAddress();
+    // console.log("BetTable address", walletAddr)
 
 
     useEffect(() => {
@@ -40,14 +43,14 @@ const BetTable = () => {
 
     const getMyFlipsData = useCallback(async () => {
         try {
-            if (walletAddr !== undefined) {
-                const flipData = await getMyFlips(walletAddr);
+            if (myWalletAddress !== undefined) {
+                const flipData = await getMyFlips(myWalletAddress);
                 setAllRecords(flipData);
             }
         } catch (error) {
             console.error("Error fetching my flips:", error);
         }
-    }, [walletAddr]);
+    }, [myWalletAddress]);
 
 
     const handleShowRecordChange = (record) => {

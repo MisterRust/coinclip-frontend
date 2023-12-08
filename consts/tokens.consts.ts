@@ -5,10 +5,10 @@ export const TOKEN_ARRAY = {
         value: "ADA",
         policy: "",
         asset: "",
-        policyAsset:"",
+        policyAsset: "",
         decimals: 6,
         choices: [
-            5, 10, 25, 50, 75, 100
+            2, 10, 25, 50, 75, 100
             // 1, 2, 3, 4, 5
         ],
         mainImage: CARDANO_IMG,
@@ -29,9 +29,9 @@ export const TOKEN_ARRAY = {
     },
     "nebula": {
         value: "NEBULA",
-        policyId: '3744d5e39333c384505214958c4ed66591a052778512e56caf420f62',
+        policyId: '709b390366333530f0193a39cfb072dc68b6a5782cc42ef10019ca82',
         asset: '4e4542554c41',
-        policyAsset: "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41",
+        policyAsset: "709b390366333530f0193a39cfb072dc68b6a5782cc42ef10019ca824e4542554c41",
         decimals: 8,
         choices: [
             5000, 10000, 25000, 50000, 100000
