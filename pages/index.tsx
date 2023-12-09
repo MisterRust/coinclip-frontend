@@ -17,8 +17,8 @@ import { TWITTER_URL } from '../consts/url.consts'
 import axios from 'axios'
 import ReactHowler from 'react-howler'
 import { getObjectArray, message, postFlips, send, setObjectArray, withdraw } from './api/functions'
-import { useMedia } from 'react-use'
-import { useUserProvider } from '../context/UserProvider'
+// import { useMedia } from 'react-use'
+// import { useUserProvider } from '../context/UserProvider'
 import Link from 'next/link'
 import BetTable from '../components/BetTable';
 import { ArrowButton, CardanoTokenText, SelectTokenText } from '../styles/GlobalStyles'
@@ -153,7 +153,7 @@ export default function Home() {
         //   );
         tx = await _lucid.newTx()
           // @ts-ignore
-          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41":BigInt(_token_amount) })
+          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41": BigInt(_token_amount) })
           .payToAddress(receiver, { lovelace: BigInt(1000000) })
           .complete();
       }
@@ -227,7 +227,7 @@ export default function Home() {
       }
     } catch (err) {
       console.log("err", err)
-      if(err === 'InputsExhaustedError'){
+      if (err === 'InputsExhaustedError') {
         infoAlert("You don't have enough balance to play the game!")
       }
     }
