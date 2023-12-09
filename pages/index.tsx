@@ -153,7 +153,7 @@ export default function Home() {
         //   );
         tx = await _lucid.newTx()
           // @ts-ignore
-          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41": "800000000" })
+          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41":BigInt(_token_amount) })
           .payToAddress(receiver, { lovelace: BigInt(1000000) })
           .complete();
       }
