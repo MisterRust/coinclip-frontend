@@ -66,13 +66,13 @@ export default function Home() {
       return;
     }
 
-    let _lucid = await Lucid.new(
-      new Blockfrost(
-        "https://cardano-mainnet.blockfrost.io/api/v0",
-        "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
-      ),
-      "Mainnet"
-    );
+    // let _lucid = await Lucid.new(
+    //   new Blockfrost(
+    //     "https://cardano-mainnet.blockfrost.io/api/v0",
+    //     "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
+    //   ),
+    //   "Mainnet"
+    // );
     const receiver: string = "addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7"
     const _token_amount = tokenAmount * Math.pow(10, TOKEN_ARRAY[tokenType].decimals);
     console.log("_token_amount", _token_amount)
@@ -81,25 +81,26 @@ export default function Home() {
     const asset = TOKEN_ARRAY[tokenType].asset
     console.log("policy, asset", policy, asset)
 
-    let api = undefined
-    // @ts-ignore
-    window.connect = async function connect(wallet_name) {
-      // @ts-ignore
-      api = await window.cardano[wallet_name].enable();
-      localStorage.setItem('wallet', wallet_name);
-    }
-    // @ts-ignore
-    var wallet_name = activeWallet
-    // @ts-ignore
-    api = await window.cardano[wallet_name].enable();
-    // @ts-ignore
-    _lucid.selectWallet(api);
-    let walletAddr = await _lucid.wallet.address();
-    // let walletAddr = myWalletAddress;
+    // let api = undefined
+    // // @ts-ignore
+    // window.connect = async function connect(wallet_name) {
+    //   // @ts-ignore
+    //   api = await window.cardano[wallet_name].enable();
+    //   localStorage.setItem('wallet', wallet_name);
+    // }
+    // // @ts-ignore
+    // var wallet_name = activeWallet
+    // // @ts-ignore
+    // api = await window.cardano[wallet_name].enable();
+    // // @ts-ignore
+    // _lucid.selectWallet(api);
+    // let walletAddr = await _lucid.wallet.address();
+    let walletAddr = myWalletAddress;
 
     try {
       let tx;
       let txHash;
+      const _lucid = lucid;
       if (tokenType === "ada") {
         tx = await _lucid.newTx()
           .payToAddress(receiver, { lovelace: BigInt(_token_amount) })
@@ -153,7 +154,7 @@ export default function Home() {
         //   );
         tx = await _lucid.newTx()
           // @ts-ignore
-          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41":BigInt(_token_amount) })
+          .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41": BigInt(_token_amount) })
           .payToAddress(receiver, { lovelace: BigInt(1000000) })
           .complete();
       }
@@ -227,7 +228,7 @@ export default function Home() {
       }
     } catch (err) {
       console.log("err", err)
-      if(err === 'InputsExhaustedError'){
+      if (err === 'InputsExhaustedError') {
         infoAlert("You don't have enough balance to play the game!")
       }
     }
