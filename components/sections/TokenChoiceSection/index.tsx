@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './index.module.css'
 import { TOKEN_ARRAY } from '../../../consts/tokens.consts';
 import { FlexBox } from '../../common/FlexBox';
@@ -55,7 +55,34 @@ interface TokenChoiceSectionProps {
 const TokenChoiceSection = ({
     tokenAmount, setTokenAmount, tokenType, play
 }: TokenChoiceSectionProps) => {
+    const storedCountdown = Math.floor((parseInt(localStorage.getItem('tx-pending')) - new Date().getTime()) / 1000);
     console.log("TOKEN_ARRAY[tokenType]", TOKEN_ARRAY[tokenType].choices)
+    const [countdown, setCountdown] = useState(storedCountdown > 0 ? storedCountdown : 0);
+
+
+    useEffect(() => {
+        let timer;
+
+        if (countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown((prevCount) => {
+                    if (prevCount === 1) {
+                        // setIsButtonDisabled(false);
+                        localStorage.removeItem('countdown'); // Remove countdown from storage after it reaches 1
+                        clearInterval(timer);
+                    } else {
+                        localStorage.setItem('countdown', String(prevCount - 1));
+                    }
+                    return prevCount - 1;
+                });
+            }, 1000);
+        }
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
+
     const getExactFormatValue = (value: number) => {
         if (value > 1000) {
             return value / 1000 + "k"
@@ -91,10 +118,10 @@ const TokenChoiceSection = ({
                 </FlexBox>
             </FlexBox>
             {
-                parseInt(localStorage.getItem('tx-pending')) > new Date().getTime()
+                countdown > 0
                     ?
                     <CustomButton
-                        text='PLAY NOW'
+                        text={countdown}
                         bgColor='#aaaaaa'
                         smWidth='100%'
                     />
