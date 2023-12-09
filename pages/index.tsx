@@ -227,6 +227,9 @@ export default function Home() {
       }
     } catch (err) {
       console.log("err", err)
+      if(err === 'InputsExhaustedError'){
+        infoAlert("You don't have enough balance to play the game!")
+      }
     }
 
   }
