@@ -8,7 +8,7 @@ export const TOKEN_ARRAY = {
         policyAsset: "",
         decimals: 6,
         choices: [
-            2, 10, 25, 50, 75, 100
+            5, 10, 25, 50, 75, 100
             // 1, 2, 3, 4, 5
         ],
         mainImage: CARDANO_IMG,
