@@ -89,7 +89,7 @@ export default function Home() {
       localStorage.setItem('wallet', wallet_name);
     }
     // @ts-ignore
-    var wallet_name = "nami"
+    var wallet_name = activeWallet
     // @ts-ignore
     api = await window.cardano[wallet_name].enable();
     // @ts-ignore

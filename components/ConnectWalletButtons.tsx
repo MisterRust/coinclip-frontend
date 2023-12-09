@@ -18,7 +18,7 @@ const ConnectWalletButtons = () => {
     const { connect, disconnect, connecting, wallet, connected } = useWallet();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const userContext = useContext(UserContext);
-    const {myWalletAddress, enableWallet, disableWalletAddress} = useWalletConnect()
+    const { myWalletAddress, enableWallet, disableWalletAddress } = useWalletConnect()
 
     // Destructure context values with default functions to avoid null issues
     const { setAddress = () => { }, setUserWallet = () => { }, setWalletName = () => { } } = userContext || {};
@@ -60,10 +60,10 @@ const ConnectWalletButtons = () => {
 
     const handleConnectWallet = (walletName: string) => async () => {
         try {
-          await enableWallet(walletName);
+            await enableWallet(walletName);
         } catch (err) {
         }
-      };
+    };
 
     const handleDisconnect = () => {
         localStorage.removeItem("selectedWallet");
@@ -131,21 +131,20 @@ const ConnectWalletButtons = () => {
                 {myWalletAddress && (
                     <div className="hidden group-hover:block absolute left-0 top-[40px] w-full">
                         {/* {selectedWallet && ( */}
-                            <button
-                                className="text-white border-2 py-2.5 px-5 rounded-md cursor-pointer capitalize mt-2.5 w-full"
-                                onClick={() => disableWalletAddress()}
-                            >
-                                disconnect
-                            </button>
+                        <button
+                            className="text-white border-2 py-2.5 px-5 rounded-md cursor-pointer capitalize mt-2.5 w-full"
+                            onClick={() => disableWalletAddress()}
+                        >
+                            disconnect
+                        </button>
                         {/* )} */}
                     </div>
                 )}
             </button>
             {!myWalletAddress && isOpen && (
                 <div className="text-sm font-white h-12 uppercase  duration-300 border-white">
-                    {!selectedWallet && !connecting && (
-                        <ul className="px-4 border-2 border-white rounded-lg bg-white">
-                            {/* {walletLists.map((walletlist) => (
+                    <ul className="px-4 border-2 border-white rounded-lg bg-white">
+                        {/* {walletLists.map((walletlist) => (
                                 <li
                                     className="flex space-x-2 items-center py-2 bg-white cursor-pointer"
                                     key={walletlist.name}
@@ -162,25 +161,25 @@ const ConnectWalletButtons = () => {
                                     </span>
                                 </li>
                             ))} */}
-                              {WALLETS_DATA.map((walletlist: any) => (
-                                <li
-                                    className="flex space-x-2 items-center py-2 bg-white cursor-pointer"
-                                    key={walletlist.text}
-                                    onClick={handleConnectWallet(walletlist?.link)}
-                                >
-                                    <Image
-                                        src={walletlist.image}
-                                        alt={walletlist.text}
-                                        width="30"
-                                        height="30"
-                                    />
-                                    <span className="text-black h-12 py-3">
-                                        {walletlist.text}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                        {WALLETS_DATA.map((walletlist: any) => (
+                            <li
+                                className="flex space-x-2 items-center py-2 bg-white cursor-pointer"
+                                key={walletlist.text}
+                                onClick={handleConnectWallet(walletlist?.link)}
+                            >
+                                <Image
+                                    src={walletlist.image}
+                                    alt={walletlist.text}
+                                    width="30"
+                                    height="30"
+                                />
+                                <span className="text-black h-12 py-3">
+                                    {walletlist.text}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+
                 </div>
             )}
         </>
