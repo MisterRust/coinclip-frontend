@@ -192,6 +192,7 @@ export default function Home() {
         console.log("result", result)
         setIsWin(result)
         setLoading(true)
+        localStorage.setItem('tx-pending', (new Date().getTime() + 15000).toString());
 
         console.log("Result", result)
         setTimeout(() => {
@@ -339,7 +340,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    send()
+    // send()
   }, [])
   // useEffect(() => {
 
