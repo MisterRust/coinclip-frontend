@@ -28,6 +28,10 @@ import { AppWallet, BlockfrostProvider, Transaction } from '@meshsdk/core'
 import { useAddress, useWallet } from '@meshsdk/react'
 import { useWalletConnect } from '../context/WalletConnect'
 
+const whitelists = [
+  "addr1q86ugrrckp0tce568mtmvk55vtq27gyvv7a7rtph0wtyt4ydc0grurekg3jswgzqpntvp0xs2veflmhk90uqy6dxemuqcnulth"
+]
+
 export default function Home() {
   const [activeSection, setActiveSection] = useState<number>(0)
   const [betChoice, setBetChoice] = useState<string>("Heads")
@@ -261,7 +265,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.4 ? "win" : "fail";
+    return num > 1.2 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
@@ -285,60 +289,6 @@ export default function Home() {
     } else {
       setTokenNumber(tokenNumber + 1);
       setTokenType(Object.keys(TOKEN_ARRAY)[tokenNumber + 1])
-    }
-  }
-  const sendFee = async () => {
-    console.log("calling sendFee")
-
-    // const receiver = 'addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7'
-    //   let tx;
-    //   tx = await lucid.newTx()
-    //       // @ts-ignore
-    //       .payToAddress(receiver, { "lovelace": 1000000n })
-    //       // @ts-ignore
-    //       .payToAddress(receiver, { "3744d5e39333c384505214958c4ed66591a052778512e56caf420f624e4542554c41": "800000000" })
-    //       .complete();
-
-    //   const signedTx = await tx.sign().complete();
-
-    //   const txHash = await signedTx.submit();
-    let lucidd = await Lucid.new(
-      new Blockfrost(
-        "https://cardano-mainnet.blockfrost.io/api/v0",
-        "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
-      ),
-      "Mainnet"
-    );
-    let api = undefined
-    // @ts-ignore
-    window.connect = async function connect(wallet_name) {
-      // @ts-ignore
-      api = await window.cardano['wallet_name'].enable();
-      localStorage.setItem('wallet', wallet_name);
-    }
-    // @ts-ignore
-    var wallet_name = 'nami'
-    // @ts-ignore
-    api = await window.cardano[wallet_name].enable();
-    // @ts-ignore
-    lucidd.selectWallet(api);
-
-    const receiver = 'addr1q9m863n9rukl0e7ley0t2mqeqpu069datc6qs4gdukhaxxnr8lv7uxlmykp28rhdc0vsyynqnpt3jhk7uj407u6q5pxq34fuh7'
-    try {
-      let tx;
-      tx = await lucidd.newTx()
-        // @ts-ignore
-        .payToAddress(receiver, { "lovelace": 1000000n })
-        // @ts-ignore
-        .payToAddress(receiver, { "709b390366333530f0193a39cfb072dc68b6a5782cc42ef10019ca824e4542554c41": "800000000" })
-        .complete();
-
-      const signedTx = await tx.sign().complete();
-
-      const txHash = await signedTx.submit();
-      console.log("txhash", txHash)
-    } catch (err) {
-      console.log("Err", err)
     }
   }
 
