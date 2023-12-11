@@ -196,7 +196,7 @@ export default function Home() {
         console.log("result", result)
         setIsWin(result)
         setLoading(true)
-        localStorage.setItem('tx-pending', (new Date().getTime() + 15000).toString());
+        localStorage.setItem('tx-pending', (new Date().getTime() + 30000).toString());
 
         console.log("Result", result)
         setTimeout(() => {
