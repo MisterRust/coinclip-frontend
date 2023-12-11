@@ -196,7 +196,7 @@ export default function Home() {
         console.log("result", result)
         setIsWin(result)
         setLoading(true)
-        localStorage.setItem('tx-pending', (new Date().getTime() + 30000).toString());
+        localStorage.setItem('tx-pending', (new Date().getTime() + 60000).toString());
 
         console.log("Result", result)
         setTimeout(() => {
@@ -265,7 +265,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.2 ? "win" : "fail";
+    return num > 0.01 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
