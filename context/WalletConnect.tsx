@@ -41,20 +41,21 @@ export const WalletConnectProvider = ({ children }: PropsWithChildren) => {
   };
 
   const enableWallet = async (name: string) => {
+    console.log("wwalelt name", name)
     const api = await window.cardano[name].enable();
     try {
-    //   const response = await axios.get("https://crashr.up.railway.app/secure/blockfrost")
-    //   console.log("api response", response)
-    //   if (!response) {
-    //     infoAlert("You are not authorized!!!")
-    //     return;
-    //   }
+      //   const response = await axios.get("https://crashr.up.railway.app/secure/blockfrost")
+      //   console.log("api response", response)
+      //   if (!response) {
+      //     infoAlert("You are not authorized!!!")
+      //     return;
+      //   }
 
       const newLucid = await Lucid.new(
         new Blockfrost(
           "https://cardano-mainnet.blockfrost.io/api/v0",
-        //   response.data.key
-        "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
+          //   response.data.key
+          "mainnetGY4Dy2Odu9EN6N7cQTq8z2EoW9BqdRlH"
         ),
         "Mainnet"
       );
