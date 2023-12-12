@@ -265,7 +265,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.2 ? "win" : "fail";
+    return num > 1.1 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {

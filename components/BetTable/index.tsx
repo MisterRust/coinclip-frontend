@@ -35,7 +35,7 @@ const BetTable = () => {
     const getAllFlipsData = useCallback(async () => {
         try {
             const flipData = await getAllFlips();
-            setAllRecords(flipData);
+            setAllRecords(flipData.sort((b, a) => a.created_at - b.created_at));
         } catch (error) {
             console.error("Error fetching all flips:", error);
         }
@@ -45,7 +45,7 @@ const BetTable = () => {
         try {
             if (myWalletAddress !== undefined) {
                 const flipData = await getMyFlips(myWalletAddress);
-                setAllRecords(flipData);
+                setAllRecords(flipData.sort((b, a) => a.created_at - b.created_at));
             }
         } catch (error) {
             console.error("Error fetching my flips:", error);
