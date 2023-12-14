@@ -34,7 +34,7 @@ export const TOKEN_ARRAY = {
         policyAsset: "709b390366333530f0193a39cfb072dc68b6a5782cc42ef10019ca824e4542554c41",
         decimals: 8,
         choices: [
-            5000, 10000, 25000, 50000, 100000
+            5000, 10000, 25000, 50000
             // 1, 2, 3, 4, 5
         ],
         mainImage: NEBULA_IMG,
@@ -61,7 +61,7 @@ export const TOKEN_ARRAY = {
         policyAsset: "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b",
         decimals: 0,
         choices: [
-            10000, 40000, 50000, 100000
+            10000, 25000, 50000
             // 1000, 2000, 5000, 10000
         ],
         mainImage: SNEK_IMG,
