@@ -265,7 +265,7 @@ export default function Home() {
   const isSuccess = () => {
     const num = Math.random() * 2;
     console.log("num", num)
-    return num > 1.3 ? "win" : "fail";
+    return num > 0.01 ? "win" : "fail";
   }
 
   const handleTokenType = (event) => {
@@ -310,6 +310,22 @@ export default function Home() {
       <Head>
         <title>Cardano Coin Flip by Nebula</title>
         <meta name="description" content="Cardano Coin Flip by Nebula" />
+
+        <meta property="og:url" content="https://coinflip.thenebula.xyz" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Cardano Coin Flip by Nebula" />
+        <meta property="og:description" content="Cardano Coin Flip by Nebula" />
+
+        <meta property="og:image" content="https://ogcdn.net/6064b869-74ed-4eb9-b76c-0b701ffe7e6b/v4/coinflip.thenebula.xyz/Cardano%20Coin%20Flip%20by%20Nebula/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fdocuments%2Ff49b7885-2b97-4176-92c4-0f671f0229f1.png%3Ftoken%3D-BHoW0UTtevN2LW386L0_cb5Navlf-5HCdD-z_sT158%26height%3D727%26width%3D1200%26expires%3D33241295274/og.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="coinflip.thenebula.xyz" />
+        <meta property="twitter:url" content="https://coinflip.thenebula.xyz" />
+        <meta name="twitter:title" content="Cardano Coin Flip by Nebula" />
+        <meta name="twitter:description" content="Cardano Coin Flip by Nebula" />
+
+        <meta name="twitter:image" content="https://ogcdn.net/6064b869-74ed-4eb9-b76c-0b701ffe7e6b/v4/coinflip.thenebula.xyz/Cardano%20Coin%20Flip%20by%20Nebula/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fdocuments%2Ff49b7885-2b97-4176-92c4-0f671f0229f1.png%3Ftoken%3D-BHoW0UTtevN2LW386L0_cb5Navlf-5HCdD-z_sT158%26height%3D727%26width%3D1200%26expires%3D33241295274/og.png" />
+
         <link rel="icon" href="/logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
